@@ -1,0 +1,1176 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Micro:bit Dashboard</title>
+<style>
+:root{
+  --bg:#f5f6f8;--surface:#fff;--line:#e5e7eb;--text:#17191c;--muted:#73777f;
+  --accent:#e5484d;--accent-soft:#fff0f1;--green:#20a464;--blue:#4b7bec;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(17,24,39,.05);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+
+body.dark{
+  --bg:#111315;--surface:#1a1d20;--line:#2c3035;--text:#f1f3f5;--muted:#969ba3;
+  --accent-soft:#321c1e;--shadow:0 1px 2px rgba(0,0,0,.25),0 8px 24px rgba(0,0,0,.18);
+}
+body.dark .login{background:#111315}
+body.dark .login-box,body.dark .topbar,body.dark .card,body.dark .controller-card{background:#1a1d20;border-color:#2c3035}
+body.dark .input,body.dark .btn,body.dark .dpad button{background:#202428;border-color:#343940;color:#eee}
+body.dark .tab{color:#888e97}
+body.dark .tab.active{color:#fff;border-color:#fff}
+body.dark .brand-mark,.dark .login-mark{background:#f1f3f5;color:#111}
+body.dark .stat,.dark .command{background:#202428;border-color:#30353b;color:#ddd}
+body.dark .chart-grid line{stroke:#2b3035}
+body.dark .webcam,.dark .log{background:#101214}
+body.dark .profile-menu{background:#1a1d20;border-color:#343940}
+body.dark .profile-item{background:#1a1d20;color:#ddd}
+body.dark .profile-item:hover{background:#24282d}
+body.dark .profile-preview{border-color:#2c3035}
+body.dark .badge{background:#282d32;color:#bbb}
+body.dark .badge.ok{background:#153324;color:#71d49b}
+body.dark .login p,body.dark .login-hint{color:#969ba3!important}
+body.dark .input:focus{border-color:#646a73;box-shadow:0 0 0 3px #292d32}
+
+/* Login */
+.login{min-height:100vh;display:grid;place-items:center;padding:24px;background:#f7f7f8}
+.login-box{width:min(390px,100%);background:#fff;border:1px solid var(--line);border-radius:14px;padding:32px;box-shadow:var(--shadow)}
+.login-mark{width:42px;height:42px;border-radius:10px;background:#202226;color:#fff;display:grid;place-items:center;font-weight:800;margin-bottom:25px}
+.login h1{font-size:23px;letter-spacing:-.4px;margin:0 0 7px}
+.login p{margin:0 0 26px;color:var(--muted);font-size:13px;line-height:1.6}
+.label{display:block;font-size:11px;font-weight:700;margin:0 0 7px;color:#555}
+.input{width:100%;height:44px;border:1px solid #d9dce1;border-radius:8px;padding:0 12px;outline:0;margin-bottom:16px;background:#fff}
+.input:focus{border-color:#a9adb5;box-shadow:0 0 0 3px #f0f1f3}
+.login-btn{width:100%;height:44px;border:0;border-radius:8px;background:#202226;color:#fff;font-weight:700}
+.login-hint{font-size:11px!important;text-align:center;margin:15px 0 0!important;color:#9a9da3!important}
+.error{min-height:17px;color:#c7343b;font-size:11px;margin:-6px 0 10px}
+
+/* App shell */
+.shell{max-width:1180px;margin:auto;padding:22px}
+.topbar{height:64px;background:var(--surface);border:1px solid var(--line);border-radius:12px;display:flex;align-items:center;justify-content:space-between;padding:0 16px 0 18px}
+.brand{display:flex;align-items:center;gap:11px}
+.brand-mark{width:35px;height:35px;border-radius:8px;background:#202226;color:#fff;display:grid;place-items:center;font-size:11px;font-weight:800}
+.brand-name{font-size:14px;font-weight:750}.brand-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.top-actions{display:flex;align-items:center;gap:9px}
+.connection{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted);padding-right:4px}
+.dot{width:7px;height:7px;border-radius:50%;background:#c5c7cc}.dot.on{background:var(--green)}
+.theme-toggle{width:34px;height:34px;border:1px solid var(--line);background:#fff;border-radius:50%;display:grid;place-items:center;font-size:16px;color:#444;transition:.15s}
+.theme-toggle:hover{background:#f3f4f5;transform:translateY(-1px)}
+body.dark .theme-toggle{background:#202428;color:#f5c451;border-color:#343940}
+body.dark .theme-toggle:hover{background:#282d32}
+.btn{height:34px;border:1px solid var(--line);background:#fff;border-radius:7px;padding:0 12px;font-size:11px;font-weight:700;color:#36383d}
+.btn.primary{background:#202226;color:#fff;border-color:#202226}
+.btn.danger{color:#c7343b}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+.tabs{display:flex;gap:2px;margin:17px 0 20px;border-bottom:1px solid var(--line);overflow:auto}
+.tab{border:0;background:transparent;color:#8a8e95;padding:10px 14px 11px;font-size:11px;font-weight:700;border-bottom:2px solid transparent;white-space:nowrap}
+.tab.active{color:#202226;border-color:#202226}
+
+.page{display:none}.page.active{display:block}
+.section-title{font-size:11px;letter-spacing:.5px;color:#747880;font-weight:800;margin:0 0 11px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;box-shadow:0 1px 1px rgba(0,0,0,.015)}
+.card-head{display:flex;justify-content:space-between;align-items:flex-start}
+.card-title{font-size:11px;font-weight:750}.value{font-size:22px;font-weight:750;letter-spacing:-.5px}.unit{font-size:9px;color:#a0a3a8;margin-top:2px;text-align:right}
+.chart{height:110px;margin-top:12px;position:relative;overflow:hidden;border-top:1px solid #f0f1f3}
+.chart svg{width:100%;height:100%}
+.chart-grid line{stroke:#f0f1f3;stroke-width:1}
+.note{font-size:10px;color:var(--muted);line-height:1.6}
+.wide{grid-column:1/-1}
+
+/* Robot controller */
+.robot-layout{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.controller-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px}
+.controller-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.controller-head h2{font-size:12px;margin:0}.controller-head span{font-size:10px;color:var(--muted)}
+.dpad{display:grid;grid-template-columns:60px 60px 60px;grid-template-rows:60px 60px 60px;gap:6px;justify-content:center;margin:8px 0 6px}
+.dpad button{border:1px solid #dfe1e5;background:#fff;border-radius:8px;color:#444;font-size:19px}
+.dpad button:active,.dpad button.active{background:#f2f3f5;border-color:#c8cbd0}
+.dpad .stop{background:var(--accent-soft);color:var(--accent);border-color:#ffd1d3}
+.up{grid-column:2}.left{grid-column:1;grid-row:2}.stop{grid-column:2;grid-row:2}.right{grid-column:3;grid-row:2}.down{grid-column:2;grid-row:3}
+.hint-label{text-align:center;font-size:9px;color:#a0a3a8;letter-spacing:.3px;margin:6px 0 18px}
+.control-row{display:flex;align-items:center;justify-content:space-between;margin:11px 0;font-size:11px}
+.mode-switcher{display:flex;gap:6px;margin:0 0 18px;background:#f2f3f5;padding:4px;border-radius:9px;border:1px solid var(--line)}
+body.dark .mode-switcher{background:#202428}
+.mode-btn{flex:1;border:0;background:transparent;padding:8px 10px;border-radius:6px;font-size:10px;font-weight:800;color:#8a8e95;letter-spacing:.3px}
+.mode-btn.active{background:#202226;color:#fff}
+body.dark .mode-btn.active{background:#3a3f45;color:#fff}
+.dpad-circle{display:grid;grid-template-areas:". up ." "left center right" ". down .";gap:10px;justify-content:center;align-items:center;background:#f2f3f5;padding:22px;border-radius:50%;border:2px dashed #d4d6da;margin:0 auto}
+body.dark .dpad-circle{background:#202428;border-color:#3a3f45}
+.dpad-circle .dbtn{width:58px;height:58px;background:#fff;border:2px solid var(--accent);color:#222;border-radius:12px;font-size:20px;display:grid;place-items:center;touch-action:none;cursor:pointer}
+body.dark .dpad-circle .dbtn{background:#26292d;color:#eee}
+.dpad-circle .dbtn.pressed{background:var(--accent);color:#fff;transform:scale(.9)}
+.dpad-circle .dbtn.center{border-radius:50%;grid-area:center;font-size:15px}
+.dpad-circle .up{grid-area:up}.dpad-circle .down{grid-area:down}.dpad-circle .left{grid-area:left}.dpad-circle .right{grid-area:right}
+.dpad-empty{text-align:center;color:var(--muted);font-style:italic;padding:30px 10px;font-size:11px}
+.range{width:70%;accent-color:var(--accent)}
+.command{padding:10px 11px;background:#f7f8f9;border:1px solid var(--line);border-radius:7px;font-size:11px;color:#62666d}
+.command strong{color:#222}
+body.dark .command strong{color:#fff}
+.action-row{display:flex;gap:8px;margin-top:12px}.action-row .btn{flex:1}
+.estop{color:#c7343b!important}
+
+/* status */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:13px}
+.stat{padding:12px;border:1px solid var(--line);border-radius:8px;background:#fafafa}
+.stat small{display:block;color:#999;font-size:9px;margin-bottom:6px}.stat b{font-size:14px}
+.badge{font-size:9px;padding:4px 7px;border-radius:20px;background:#f1f2f4;color:#666}
+.badge.ok{background:#eaf8f0;color:#19794b}
+.badge.err{background:#fdecec;color:#c7343b}
+
+/* AI / webcam */
+.ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.webcam{min-height:240px;border-radius:8px;background:#1f2124;display:grid;place-items:center;color:#777;font-size:11px;overflow:hidden;position:relative}
+.webcam canvas{display:block;max-width:100%;height:auto;border-radius:8px}
+.actions{display:flex;gap:8px;margin-top:12px}.actions .btn{flex:1}
+.log{background:#202226;color:#d8d9dc;border-radius:8px;padding:14px;height:300px;overflow:auto;font:11px/1.8 ui-monospace,SFMono-Regular,Menlo,monospace}
+.log .ok{color:#63d391}.log .info{color:#9da3ad}.log .err{color:#f17b80}
+
+.url-row{display:flex;gap:8px;align-items:flex-start}
+.url-row .input{margin-bottom:0;flex:1;min-width:0;height:38px;font-size:12px}
+.url-row .btn{height:38px;flex:none}
+.pred-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.pred-top strong{font-size:20px;letter-spacing:-.4px}
+.pred-top span{font-size:11px;color:var(--muted)}
+.bars{display:grid;gap:9px;margin-top:14px}
+.bar-row{display:grid;grid-template-columns:90px 1fr 42px;gap:9px;align-items:center;font-size:11px}
+.bar-row .bname{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:700}
+.bar-track{height:8px;border-radius:99px;background:#eceef1;overflow:hidden}
+body.dark .bar-track{background:#2a2e33}
+.bar-fill{height:100%;width:0;background:var(--blue);border-radius:99px;transition:width .12s linear}
+.bar-row.top .bar-fill{background:var(--accent)}
+.bar-row .bval{text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.map-grid{display:grid;gap:8px;margin-top:10px}
+.map-row{display:grid;grid-template-columns:90px 1fr;gap:9px;align-items:center;font-size:11px}
+.map-row .bname{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.map-row .input{height:34px;margin:0;font-size:11px}
+.switch-row{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11px;margin:14px 0 4px}
+.switch-row input[type=checkbox]{width:17px;height:17px;accent-color:var(--accent);flex:none}
+.ai-state{margin-top:6px;line-height:1.5}
+.ai-state.warn{color:#b26a00}
+body.dark .ai-state.warn{color:#f0b35a}
+
+/* widget builder */
+.widget-card{border:1px solid var(--line);border-radius:8px;padding:12px;background:#fafafa}
+body.dark .widget-card{background:#202428;border-color:#30353b}
+.widget-card small{display:block;color:#999;font-size:9px;margin-bottom:6px;letter-spacing:.3px}
+.widget-card b{font-size:12px}
+.widget-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+
+.profile-trigger{position:relative;cursor:pointer;user-select:none}
+.avatar{width:35px;height:35px;border-radius:50%;background:#202226;color:#fff;display:grid;place-items:center;font-size:10px;font-weight:800;overflow:hidden;flex:none;border:1px solid #e0e1e4}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.avatar.large{width:42px;height:42px}
+.profile-chevron{font-size:13px;color:#9a9da3;margin-left:1px}
+.profile-menu{position:absolute;top:47px;left:0;width:235px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 30px rgba(17,24,39,.12);padding:8px;z-index:20;display:none}
+.profile-menu.open{display:block}
+.profile-preview{display:flex;align-items:center;gap:10px;padding:9px;border-bottom:1px solid #f0f1f3;margin-bottom:5px}
+.profile-preview strong{display:block;font-size:11px}.profile-preview small{display:block;color:#999;font-size:9px;margin-top:3px}
+.profile-item{display:block;width:100%;text-align:left;border:0;background:#fff;border-radius:7px;padding:10px;font-size:10px;color:#444}
+.profile-item:hover{background:#f5f6f8}.profile-item.logout-item{color:#c7343b}
+/* Responsive */
+@media(max-width:800px){.shell{padding:12px}.robot-layout,.ai-grid{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.topbar{height:auto;padding:12px;gap:12px;align-items:flex-start}.top-actions{flex-wrap:wrap;justify-content:flex-end}.tabs{overflow:auto}.tab{white-space:nowrap}}
+@media(max-width:500px){
+  .topbar{flex-direction:column}.top-actions{width:100%;justify-content:space-between}.connection{flex:1}
+  .stats{grid-template-columns:1fr 1fr}
+  .url-row{flex-direction:column}.url-row .btn{width:100%}
+}
+</style>
+</head>
+<body>
+
+<section id="loginScreen" class="login">
+  <div class="login-box">
+    <div class="login-mark">MB</div>
+    <h1>Micro:bit Dashboard</h1>
+    <p>Masuk untuk mengakses controller dan monitoring robot.</p>
+    <label class="label">USERNAME</label>
+    <input id="user" class="input" placeholder="Username" autocomplete="username">
+    <label class="label">PASSWORD</label>
+    <input id="pass" class="input" type="password" placeholder="Password" autocomplete="current-password">
+    <div id="error" class="error"></div>
+    <button class="login-btn" onclick="login()">Sign in</button>
+    <p class="login-hint">Prototype login • data akun hanya tersimpan di browser</p>
+  </div>
+</section>
+
+<main id="app" class="shell hidden">
+  <header class="topbar">
+    <div class="brand profile-trigger" onclick="toggleProfile(event)">
+      <div id="avatar" class="avatar">MB</div>
+      <div><div id="userDisplay" class="brand-name">micro:bit dashboard</div><div class="brand-sub">ROBOT • SENSOR • CONTROL</div></div>
+      <span class="profile-chevron">⌄</span>
+      <div id="profileMenu" class="profile-menu" onclick="event.stopPropagation()">
+        <div class="profile-preview">
+          <div id="menuAvatar" class="avatar large">MB</div>
+          <div>
+            <strong id="menuUser">User</strong>
+            <small>Micro:bit operator</small>
+          </div>
+        </div>
+        <button class="profile-item" onclick="changePhoto()">Change profile photo</button>
+        <button class="profile-item" onclick="removePhoto()">Remove photo</button>
+        <button class="profile-item logout-item" onclick="logout()">Log out</button>
+      </div>
+    </div>
+    <input id="photoInput" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+    <div class="top-actions">
+      <div class="connection"><span id="dot" class="dot"></span><span id="status">OFFLINE</span></div>
+      <button id="themeBtn" class="theme-toggle" onclick="toggleDarkMode()" aria-label="Toggle dark mode" title="Toggle theme"><span id="themeIcon">☾</span></button><button id="connect" class="btn primary" onclick="connect()">CONNECT</button>
+      <button class="btn" onclick="logout()">LOG OUT</button>
+    </div>
+  </header>
+
+  <nav id="tabsNav" class="tabs">
+    <button class="tab active" onclick="tab('sensor',this)">SENSOR</button>
+    <button class="tab" onclick="tab('robot',this)">TINYBIT</button>
+    <button class="tab" onclick="tab('ai',this)">AI</button>
+    <button class="tab" onclick="tab('widget',this)">WIDGET</button>
+    <button class="tab" onclick="tab('log',this)">LOG</button>
+  </nav>
+
+  <section id="sensor" class="page active">
+    <h2 class="section-title">INPUT SENSOR</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="card-head"><div class="card-title">SUHU</div><div><div class="value">24</div><div class="unit">CELSIUS</div></div></div>
+        <div class="chart"><svg viewBox="0 0 500 110" preserveAspectRatio="none"><g class="chart-grid"><line x1="0" y1="30" x2="500" y2="30"/><line x1="0" y1="65" x2="500" y2="65"/><line x1="0" y1="100" x2="500" y2="100"/></g><polyline fill="none" stroke="#e5484d" stroke-width="2" points="0,80 45,73 90,76 135,61 180,66 225,52 270,57 315,46 360,50 405,35 450,42 500,31"/></svg></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">CAHAYA</div><div><div class="value">68</div><div class="unit">PERCENT</div></div></div>
+        <div class="chart"><svg viewBox="0 0 500 110" preserveAspectRatio="none"><g class="chart-grid"><line x1="0" y1="30" x2="500" y2="30"/><line x1="0" y1="65" x2="500" y2="65"/><line x1="0" y1="100" x2="500" y2="100"/></g><polyline fill="none" stroke="#4b7bec" stroke-width="2" points="0,70 50,67 100,73 150,58 200,61 250,48 300,54 350,39 400,44 450,30 500,35"/></svg></div>
+      </div>
+      <div class="card wide">
+        <div class="card-head"><div><div class="card-title">STATUS MICRO:BIT</div><div class="note">Data akan berubah setelah Bluetooth tersambung.</div></div><span id="sensorBadge" class="badge">DISCONNECTED</span></div>
+        <div class="stats">
+          <div class="stat"><small>BATTERY</small><b>87%</b></div>
+          <div class="stat"><small>COMMAND</small><b id="sensorCommand">STOP</b></div>
+          <div class="stat"><small>SIGNAL</small><b id="signal">—</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="robot" class="page">
+    <h2 class="section-title">ROBOT CONTROL</h2>
+    <div class="robot-layout">
+      <div class="controller-card">
+        <div class="controller-head"><h2>TINYBIT CONTROLLER</h2><span>TOUCH / KEYBOARD</span></div>
+        <div id="dpadWrap">
+          <div class="mode-switcher">
+            <button class="mode-btn active" onclick="setControllerMode('touch')">TOUCH / MOUSE</button>
+            <button class="mode-btn" onclick="setControllerMode('keyboard')">KEYBOARD (WASD / ARROWS)</button>
+          </div>
+          <div class="dpad-circle">
+            <div id="dbtn-up" class="dbtn up" onpointerdown="this.classList.add('pressed');send('up')" onpointerup="this.classList.remove('pressed');send('stop')" onpointercancel="this.classList.remove('pressed');send('stop')">↑</div>
+            <div id="dbtn-left" class="dbtn left" onpointerdown="this.classList.add('pressed');send('left')" onpointerup="this.classList.remove('pressed');send('stop')" onpointercancel="this.classList.remove('pressed');send('stop')">←</div>
+            <div id="dbtn-center" class="dbtn center" onpointerdown="this.classList.add('pressed');send('circle')" onpointerup="this.classList.remove('pressed');send('stop')" onpointercancel="this.classList.remove('pressed');send('stop')">◎</div>
+            <div id="dbtn-right" class="dbtn right" onpointerdown="this.classList.add('pressed');send('right')" onpointerup="this.classList.remove('pressed');send('stop')" onpointercancel="this.classList.remove('pressed');send('stop')">→</div>
+            <div id="dbtn-down" class="dbtn down" onpointerdown="this.classList.add('pressed');send('down')" onpointerup="this.classList.remove('pressed');send('stop')" onpointercancel="this.classList.remove('pressed');send('stop')">↓</div>
+          </div>
+          <div class="hint-label" style="margin-top:14px">TEKAN &amp; TAHAN TOMBOL — LEPAS UNTUK BERHENTI</div>
+        </div>
+        <div class="control-row" style="margin-top:16px"><span>SPEED</span><input id="speed" class="range" type="range" min="0" max="255" value="150"><b id="speedValue">150</b></div>
+        <div class="action-row">
+          <button class="btn" onclick="send('horn')">HORN</button>
+          <button id="ledBtn" class="btn" onclick="toggleLED()">LED: OFF</button>
+          <button class="btn estop" onclick="stop()">E-STOP</button>
+        </div>
+      </div>
+
+      <div class="controller-card">
+        <div class="controller-head"><h2>SYSTEM ACTIVITY</h2><span>REALTIME</span></div>
+        <div class="command">CURRENT COMMAND&nbsp;&nbsp; <strong id="command">STOP</strong></div>
+        <div class="command" style="margin-top:8px">LED STATUS&nbsp;&nbsp; <strong id="ledStatus">OFF</strong></div>
+        <div id="miniLog" class="log" style="height:190px;margin-top:12px"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ai" class="page">
+    <h2 class="section-title">AI CONTROL</h2>
+    <div class="ai-grid">
+      <!-- Kiri: kamera -->
+      <div class="card">
+        <div class="card-head"><div class="card-title">WEBCAM</div><span id="aiBadge" class="badge">MODEL BELUM DIMUAT</span></div>
+        <div id="webcamBox" class="webcam"><span id="webcamPlaceholder">WEBCAM PREVIEW</span></div>
+        <div class="actions">
+          <button id="camStartBtn" class="btn primary" onclick="startCam()" disabled>START CAM</button>
+          <button id="camStopBtn" class="btn" onclick="stopCam()" disabled>STOP</button>
+        </div>
+        <p class="note" style="margin-top:10px">Kamera butuh izin browser dan koneksi aman: HTTPS, localhost, atau file lokal di Chrome/Edge.</p>
+      </div>
+
+      <!-- Kanan: model + hasil -->
+      <div class="card">
+        <div class="card-title">TEACHABLE MACHINE</div>
+        <p class="note" style="margin:8px 0 12px">Tempel link model dari panel Export Teachable Machine (Image Project), lalu tekan LOAD MODEL.</p>
+        <div class="url-row">
+          <input id="tmUrl" class="input" placeholder="https://teachablemachine.withgoogle.com/models/XXXXXXXX/" autocomplete="off" spellcheck="false">
+          <button id="tmLoadBtn" class="btn primary" onclick="loadAiModel()">LOAD MODEL</button>
+        </div>
+
+        <div class="command" style="margin-top:14px">
+          <div class="pred-top"><div>PREDICTION&nbsp;&nbsp; <strong id="predLabel">WAITING...</strong></div><span id="predConf">—</span></div>
+        </div>
+        <div id="predBars" class="bars"></div>
+
+        <div class="command" style="margin-top:14px">
+          <div class="pred-top"><div>COMMAND KE ROBOT&nbsp;&nbsp; <strong id="aiSent">—</strong></div></div>
+          <div id="aiState" class="note ai-state">Muat model dan nyalakan kamera untuk mulai.</div>
+        </div>
+      </div>
+
+      <!-- Kontrol robot dari AI -->
+      <div class="card wide">
+        <div class="card-head"><div><div class="card-title">KIRIM HASIL KE ROBOT</div><div class="note" style="margin-top:4px">Hasil deteksi dikirim sebagai command UART ke micro:bit, hanya saat kelas terdeteksi berubah. Kosongkan command kalau suatu kelas tidak perlu mengirim apa-apa.</div></div></div>
+        <div class="switch-row"><span>AKTIFKAN KIRIM OTOMATIS</span><input id="aiAuto" type="checkbox" onchange="saveAiSettings()"></div>
+        <div class="switch-row"><span>MIRROR KAMERA (samakan dengan tampilan saat training di Teachable Machine)</span><input id="aiFlip" type="checkbox" checked onchange="onFlipChange()"></div>
+        <div class="control-row"><span>MIN. KEYAKINAN</span><input id="aiThreshold" class="range" type="range" min="50" max="100" value="80" oninput="$('aiThresholdVal').textContent=this.value+'%';saveAiSettings()"><b id="aiThresholdVal">80%</b></div>
+        <label class="label" style="margin-top:6px">MAPPING KELAS → COMMAND</label>
+        <div id="mapGrid" class="map-grid"><p class="note">Muat model dulu untuk melihat daftar kelas.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="widget" class="page">
+    <h2 class="section-title">WIDGET BUILDER</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="card-title">TAMBAH WIDGET</div>
+        <div style="margin-top:14px">
+          <label class="label">TIPE WIDGET</label>
+          <select id="wKind" class="input" onchange="updateWidgetFormFields()">
+            <option value="DATA">DATA (Input/Output Sensor)</option>
+            <option value="BUTTON">CUSTOM BUTTON (Command UART)</option>
+            <option value="DPAD">DPAD (TinyBit Controller)</option>
+          </select>
+
+          <label class="label">NAMA / LABEL</label>
+          <input id="wName" class="input" placeholder="Contoh: Suhu Ruangan / Maju">
+
+          <div id="wDataFields">
+            <label class="label">TIPE DATA</label>
+            <select id="wType" class="input">
+              <option value="INPUT">INPUT</option>
+              <option value="OUTPUT">OUTPUT</option>
+            </select>
+            <label class="label">DATA KEY</label>
+            <input id="wKey" class="input" placeholder="Contoh: suhu">
+            <label class="label">SATUAN</label>
+            <input id="wUnit" class="input" placeholder="Contoh: °C, %, V, RPM">
+          </div>
+
+          <div id="wButtonFields" class="hidden">
+            <label class="label">COMMAND SAAT DITEKAN</label>
+            <input id="wPress" class="input" placeholder="Contoh: UP">
+            <label class="label">COMMAND SAAT DILEPAS (opsional)</label>
+            <input id="wRelease" class="input" placeholder="Contoh: up — kosongkan kalau tombol sekali tekan">
+            <label class="label">TARUH DI PAGE</label>
+            <select id="wPage" class="input"></select>
+          </div>
+
+          <div id="wDpadFields" class="hidden">
+            <p class="note" style="margin:6px 0 12px">Ini akan jadi controller di tab TINYBIT. Cuma bisa 1 dpad aktif — bikin baru akan menggantikan yang lama.</p>
+            <label class="label">COMMAND ATAS (↑ / W)</label>
+            <input id="dpUp" class="input" value="up">
+            <label class="label">COMMAND BAWAH (↓ / S)</label>
+            <input id="dpDown" class="input" value="down">
+            <label class="label">COMMAND KIRI (← / A)</label>
+            <input id="dpLeft" class="input" value="left">
+            <label class="label">COMMAND KANAN (→ / D)</label>
+            <input id="dpRight" class="input" value="right">
+            <label class="label">COMMAND TENGAH (◎ / Spasi)</label>
+            <input id="dpCenter" class="input" value="circle">
+            <label class="label">COMMAND STOP (dikirim saat dilepas)</label>
+            <input id="dpStop" class="input" value="stop">
+          </div>
+
+          <button class="btn primary" style="width:100%" onclick="addWidget()">TAMBAH WIDGET</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">BUAT PAGE BARU</div>
+        <p class="note" style="margin-top:8px">Page baru akan muncul jadi tab di atas, isinya kosong sampai kamu tambahkan custom button ke sana.</p>
+        <div style="margin-top:12px">
+          <label class="label">NAMA PAGE</label>
+          <input id="pageName" class="input" placeholder="Contoh: BT CONTROLER">
+          <button class="btn primary" style="width:100%" onclick="addPage()">BUAT PAGE</button>
+        </div>
+        <div id="pageListWrap" style="margin-top:16px">
+          <label class="label">PAGE CUSTOM</label>
+          <div id="pageList" class="widget-list"></div>
+          <p id="pageEmpty" class="note" style="margin-top:8px">Belum ada page custom.</p>
+        </div>
+      </div>
+
+      <div class="card wide">
+        <div class="card-title">DAFTAR WIDGET DATA</div>
+        <p class="note" style="margin-top:8px">Widget yang dibuat di sini bisa dipetakan ke data key micro:bit — tampilan nilainya masih placeholder sampai Bluetooth disambungkan.</p>
+        <div id="widgetList" class="widget-list" style="margin-top:14px"></div>
+        <p id="widgetEmpty" class="note" style="margin-top:10px">Belum ada widget data. Isi form di sebelah kiri dengan tipe DATA untuk menambahkan.</p>
+      </div>
+    </div>
+  </section>
+
+  <div id="customPages"></div>
+
+  <section id="log" class="page">
+    <h2 class="section-title">ACTIVITY LOG</h2>
+    <div id="logBox" class="log"></div>
+  </section>
+</main>
+
+<!-- TensorFlow.js + Teachable Machine (image) -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+
+<script>
+let connected=false, current="stop", ledOn=false;
+const $=id=>document.getElementById(id);
+
+function applyTheme(){
+  const dark=localStorage.getItem("microbit_dark")==="1";
+  document.body.classList.toggle("dark",dark);
+  const icon=$("themeIcon");
+  if(icon)icon.textContent=dark?"☀":"☾";
+}
+function toggleDarkMode(){
+  const dark=!document.body.classList.contains("dark");
+  localStorage.setItem("microbit_dark",dark?"1":"0");
+  applyTheme();
+  addLog(dark?"Dark mode enabled":"Light mode enabled","info");
+}
+applyTheme();
+
+function login(){
+  const u=$("user").value.trim(), p=$("pass").value;
+  if(!u||!p){$("error").textContent="Username dan password wajib diisi.";return}
+  localStorage.setItem("microbit_user",u);
+  setUser(u);
+  $("loginScreen").classList.add("hidden");$("app").classList.remove("hidden");
+  addLog("Login berhasil — "+u,"ok");
+}
+function setUser(u){
+  $("userDisplay").textContent=u;
+  $("menuUser").textContent=u;
+  const initials=u.slice(0,2).toUpperCase()||"MB";
+  if(!$("avatar").querySelector("img")) $("avatar").textContent=initials;
+  if(!$("menuAvatar").querySelector("img")) $("menuAvatar").textContent=initials;
+  loadPhoto();
+}
+function logout(){
+  stopCam();
+  localStorage.removeItem("microbit_user");
+  $("app").classList.add("hidden");$("loginScreen").classList.remove("hidden");
+  $("user").value="";$("pass").value="";$("profileMenu").classList.remove("open");
+}
+function toggleProfile(e){
+  e.stopPropagation();
+  $("profileMenu").classList.toggle("open");
+}
+document.addEventListener("click",()=>$("profileMenu").classList.remove("open"));
+
+function changePhoto(){
+  $("profileMenu").classList.remove("open");
+  $("photoInput").click();
+}
+$("photoInput").addEventListener("change",e=>{
+  const file=e.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    localStorage.setItem("microbit_profile_photo",reader.result);
+    applyPhoto(reader.result);
+    addLog("Profile photo updated","ok");
+  };
+  reader.readAsDataURL(file);
+});
+function applyPhoto(src){
+  ["avatar","menuAvatar"].forEach(id=>{
+    const el=$(id);
+    el.innerHTML="";
+    const img=document.createElement("img");
+    img.src=src;
+    el.appendChild(img);
+  });
+}
+function loadPhoto(){
+  const photo=localStorage.getItem("microbit_profile_photo");
+  if(photo)applyPhoto(photo);
+}
+function removePhoto(){
+  localStorage.removeItem("microbit_profile_photo");
+  const u=localStorage.getItem("microbit_user")||"MB";
+  const initials=u.slice(0,2).toUpperCase();
+  $("avatar").textContent=initials;$("menuAvatar").textContent=initials;
+  $("profileMenu").classList.remove("open");
+  addLog("Profile photo removed","info");
+}
+function tab(id,el){
+  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+  $(id).classList.add("active");
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));el.classList.add("active");
+}
+/* ===== Web Bluetooth — MakeCode UART service ===== */
+const UART_SERVICE="6e400001-b5a3-f393-e0a9-e50e24dcca9e";
+// Sesuai kode dari guru: 0002 dipakai untuk notify (terima), 0003 untuk write (kirim) — kebalik dari Nordic UART standar
+const UART_RX="6e400003-b5a3-f393-e0a9-e50e24dcca9e"; // app -> micro:bit (write)
+const UART_TX="6e400002-b5a3-f393-e0a9-e50e24dcca9e"; // micro:bit -> app (notify)
+let bleDevice=null, rxChar=null, txChar=null;
+
+async function connect(){
+  if(connected){ if(bleDevice&&bleDevice.gatt.connected) bleDevice.gatt.disconnect(); return; }
+  if(!navigator.bluetooth){
+    addLog("Browser ini tidak mendukung Web Bluetooth. Pakai Chrome/Edge, dan buka lewat HTTPS.","err");
+    return;
+  }
+  try{
+    addLog("Mencari perangkat micro:bit...","info");
+    bleDevice=await navigator.bluetooth.requestDevice({
+      filters:[{namePrefix:"BBC micro:bit"}],
+      optionalServices:[UART_SERVICE]
+    });
+    bleDevice.addEventListener("gattserverdisconnected",onBleDisconnected);
+
+    const server=await bleDevice.gatt.connect();
+    const service=await server.getPrimaryService(UART_SERVICE);
+    rxChar=await service.getCharacteristic(UART_RX);
+    txChar=await service.getCharacteristic(UART_TX);
+    await txChar.startNotifications();
+    txChar.addEventListener("characteristicvaluechanged",onUartData);
+
+    connected=true;
+    setConnectionUI(true);
+    addLog("Connected to "+(bleDevice.name||"micro:bit"),"ok");
+  }catch(err){
+    addLog("Gagal connect: "+err.message,"err");
+  }
+}
+function onBleDisconnected(){
+  connected=false;
+  setConnectionUI(false);
+  addLog("Micro:bit terputus","err");
+}
+function setConnectionUI(isConnected){
+  $("dot").classList.toggle("on",isConnected);
+  $("status").textContent=isConnected?"CONNECTED":"OFFLINE";
+  $("connect").textContent=isConnected?"DISCONNECT":"CONNECT";
+  $("sensorBadge").textContent=isConnected?"CONNECTED":"DISCONNECTED";
+  $("sensorBadge").className="badge "+(isConnected?"ok":"");
+  $("signal").textContent=isConnected?"GOOD":"—";
+}
+/* Web Bluetooth hanya boleh punya satu operasi tulis yang berjalan. Kalau dua command dikirim
+   berdekatan (misal dari deteksi kamera), yang kedua bisa gagal "GATT operation already in progress"
+   dan micro:bit tertinggal di command lama. Jadi semua penulisan diantre berurutan, dan dicoba ulang. */
+let uartQueue=Promise.resolve();
+function uartSend(text){
+  if(!rxChar){ addLog("Belum terhubung ke micro:bit — tekan CONNECT dulu","err"); return Promise.resolve(); }
+  const data=new TextEncoder().encode(text+"\n");
+  uartQueue=uartQueue.then(async()=>{
+    for(let attempt=1;attempt<=3;attempt++){
+      try{ await rxChar.writeValue(data); return; }
+      catch(err){
+        if(attempt===3){ addLog("Gagal mengirim perintah \""+text+"\": "+err.message,"err"); return; }
+        await new Promise(r=>setTimeout(r,40));
+      }
+    }
+  });
+  return uartQueue;
+}
+/* Buffer penerima — BLE bisa memecah satu pesan jadi beberapa paket kecil (MTU ~20 byte),
+   jadi kita kumpulkan dulu sampai ketemu newline sebelum diproses per baris. */
+let rxBuffer="";
+const sensorValues={}; // simpan nilai terakhir semua key, misal {suhu:"25", kelembaban:"70", ...}
+
+function onUartData(event){
+  const chunk=new TextDecoder().decode(event.target.value);
+  rxBuffer+=chunk;
+
+  // Pisahkan per baris. Baris terakhir yang belum ada \n disimpan lagi di buffer
+  // (kemungkinan masih potongan, menunggu paket berikutnya).
+  const lines=rxBuffer.split("\n");
+  rxBuffer=lines.pop();
+
+  lines.forEach(line=>{
+    line=line.trim();
+    if(!line) return;
+    addLog("DATA ← "+line,"info");
+    parseSensorLine(line);
+  });
+}
+function parseSensorLine(line){
+  // Format satu baris: "key:value" — contoh "suhu:25", "kelembaban:70", "lampu:1", "kipas:700", "mode:1"
+  const sep=line.indexOf(":");
+  if(sep<=0) return;
+  const key=line.slice(0,sep).trim();
+  const value=line.slice(sep+1).trim();
+  sensorValues[key]=value;
+  updateWidgetValue(key,value);
+  updateKnownSensorUI(key,value);
+}
+function updateWidgetValue(key,value){
+  const card=document.querySelector('.widget-card[data-key="'+key+'"]');
+  if(card){
+    const valEl=card.querySelector(".value");
+    if(valEl) valEl.childNodes[0].nodeValue=value+" ";
+  }
+}
+/* Opsional: kalau key-nya cocok dengan kartu bawaan di tab SENSOR, update juga tampilannya di sana. */
+function updateKnownSensorUI(key,value){
+  if(key==="suhu"||key==="temp"){
+    const cards=document.querySelectorAll("#sensor .value");
+    if(cards[0]) cards[0].textContent=value;
+  }
+  if(key==="kelembaban"||key==="cahaya"||key==="light"){
+    const cards=document.querySelectorAll("#sensor .value");
+    if(cards[1]) cards[1].textContent=value;
+  }
+}
+function send(cmd){
+  current=cmd;$("command").textContent=cmd;$("sensorCommand").textContent=cmd;
+  addLog("COMMAND → "+cmd,"info");
+  uartSend(cmd);
+}
+function toggleLED(){
+  ledOn=!ledOn;
+  $("ledStatus").textContent=ledOn?"ON":"OFF";
+  $("ledBtn").textContent=ledOn?"LED: ON":"LED: OFF";
+  $("ledBtn").classList.toggle("primary",ledOn);
+  addLog("LED → "+(ledOn?"ON":"OFF"),ledOn?"ok":"info");
+  uartSend(ledOn?"LED_ON":"LED_OFF");
+}
+function stop(){send("stop")}
+function addLog(text,type="info"){
+  const stamp="["+new Date().toLocaleTimeString()+"] "+text;
+  const d1=document.createElement("div");d1.className=type;d1.textContent=stamp;
+  $("logBox").prepend(d1);
+  const mini=$("miniLog");
+  if(mini){
+    const d2=document.createElement("div");d2.className=type;d2.textContent=stamp;
+    mini.prepend(d2);
+  }
+}
+$("speed").oninput=()=>{$("speedValue").textContent=$("speed").value}
+
+/* ===== AI — Teachable Machine (Image Model) ===== */
+let tmModel=null, tmWebcam=null, tmRunning=false, tmRaf=null;
+let tmLabels=[];            // daftar nama kelas dari model
+let aiLastCmd=null;         // command terakhir yang dikirim dari AI (supaya tidak spam)
+let aiSettings={url:"",auto:false,threshold:80,flip:true,map:{}};
+try{
+  const saved=JSON.parse(localStorage.getItem("microbit_ai")||"null");
+  if(saved)aiSettings=Object.assign(aiSettings,saved);
+}catch(e){}
+
+// Penghalusan: hasil prediksi dirata-rata dari beberapa frame terakhir supaya satu frame
+// yang salah tidak langsung mengubah command ke robot.
+const AI_SMOOTH_FRAMES=5;   // jumlah frame yang dirata-rata
+const AI_MIN_FRAMES=3;      // minimal frame terkumpul sebelum boleh mengirim
+let aiHistory=[];           // riwayat vektor probabilitas
+
+function saveAiSettings(){
+  aiSettings.url=$("tmUrl").value.trim();
+  aiSettings.auto=$("aiAuto").checked;
+  aiSettings.flip=$("aiFlip").checked;
+  aiSettings.threshold=parseInt($("aiThreshold").value,10);
+  document.querySelectorAll("#mapGrid input[data-class]").forEach(inp=>{
+    aiSettings.map[inp.dataset.class]=inp.value.trim();
+  });
+  localStorage.setItem("microbit_ai",JSON.stringify(aiSettings));
+}
+function setAiBadge(text,cls){
+  const b=$("aiBadge");
+  b.textContent=text;
+  b.className="badge "+(cls||"");
+}
+// Terima link dengan atau tanpa model.json / metadata.json, dengan atau tanpa slash di akhir
+function normalizeModelUrl(raw){
+  let u=(raw||"").trim();
+  if(!u)return "";
+  u=u.replace(/(model|metadata)\.json.*$/i,"");
+  u=u.split("?")[0].split("#")[0];
+  if(!u.endsWith("/"))u+="/";
+  return u;
+}
+async function loadAiModel(){
+  const base=normalizeModelUrl($("tmUrl").value);
+  if(!base){addLog("AI: link model Teachable Machine belum diisi","err");return}
+  if(!/^https?:\/\//i.test(base)){addLog("AI: link harus diawali https://","err");return}
+  if(typeof tmImage==="undefined"){addLog("AI: library Teachable Machine gagal dimuat (cek koneksi internet)","err");return}
+
+  const wasRunning=tmRunning;
+  if(wasRunning)stopCam();
+
+  $("tmLoadBtn").disabled=true;
+  setAiBadge("MEMUAT MODEL...","");
+  addLog("AI: memuat model dari "+base,"info");
+  try{
+    tmModel=await tmImage.load(base+"model.json",base+"metadata.json");
+    tmLabels=tmModel.getClassLabels();
+    $("tmUrl").value=base;
+    renderPredBars();
+    renderMapping();
+    saveAiSettings();
+    $("camStartBtn").disabled=false;
+    setAiBadge("MODEL SIAP · "+tmLabels.length+" KELAS","ok");
+    addLog("AI: model dimuat — kelas: "+tmLabels.join(", "),"ok");
+    if(wasRunning)startCam();
+  }catch(err){
+    tmModel=null;tmLabels=[];
+    $("camStartBtn").disabled=true;
+    setAiBadge("GAGAL MEMUAT","err");
+    addLog("AI: gagal memuat model — "+(err&&err.message?err.message:err)+". Pastikan link benar dan model sudah di-upload (Export → Upload my model).","err");
+  }finally{
+    $("tmLoadBtn").disabled=false;
+  }
+}
+function renderPredBars(){
+  const box=$("predBars");
+  box.innerHTML="";
+  tmLabels.forEach((name,i)=>{
+    const row=document.createElement("div");row.className="bar-row";row.id="bar-"+i;
+    const n=document.createElement("span");n.className="bname";n.textContent=name;n.title=name;
+    const track=document.createElement("div");track.className="bar-track";
+    const fill=document.createElement("div");fill.className="bar-fill";
+    track.appendChild(fill);
+    const v=document.createElement("span");v.className="bval";v.textContent="0%";
+    row.append(n,track,v);
+    box.appendChild(row);
+  });
+}
+function renderMapping(){
+  const grid=$("mapGrid");
+  grid.innerHTML="";
+  if(!tmLabels.length){
+    grid.innerHTML='<p class="note">Muat model dulu untuk melihat daftar kelas.</p>';
+    return;
+  }
+  tmLabels.forEach(name=>{
+    const row=document.createElement("div");row.className="map-row";
+    const n=document.createElement("span");n.className="bname";n.textContent=name;n.title=name;
+    const inp=document.createElement("input");
+    inp.className="input";inp.dataset.class=name;
+    inp.placeholder="command (kosong = tidak kirim)";
+    // default: nama kelas huruf kecil, kecuali user sudah pernah menyimpan mapping
+    inp.value=(name in aiSettings.map)?aiSettings.map[name]:name.toLowerCase();
+    inp.oninput=saveAiSettings;
+    row.append(n,inp);
+    grid.appendChild(row);
+  });
+  saveAiSettings();
+}
+async function startCam(){
+  if(!tmModel){addLog("AI: muat model dulu sebelum menyalakan kamera","err");return}
+  if(tmRunning)return;
+  $("camStartBtn").disabled=true;
+  try{
+    tmWebcam=new tmImage.Webcam(320,320,aiSettings.flip!==false); // lebar, tinggi, mirror
+    await tmWebcam.setup();
+    await tmWebcam.play();
+    const box=$("webcamBox");
+    box.innerHTML="";
+    box.appendChild(tmWebcam.canvas);
+    tmRunning=true;
+    aiLastCmd=null;
+    aiHistory=[];
+    setAiState("Menstabilkan prediksi...");
+    $("camStopBtn").disabled=false;
+    setAiBadge("MENDETEKSI","ok");
+    addLog("AI: kamera menyala, deteksi berjalan","ok");
+    tmRaf=requestAnimationFrame(aiLoop);
+  }catch(err){
+    tmRunning=false;
+    $("camStartBtn").disabled=false;
+    setAiBadge("KAMERA GAGAL","err");
+    addLog("AI: tidak bisa mengakses kamera — "+(err&&err.message?err.message:err)+". Izinkan akses kamera di browser, dan buka lewat HTTPS, localhost, atau file lokal.","err");
+  }
+}
+function stopCam(){
+  const wasRunning=tmRunning;
+  tmRunning=false;
+  if(tmRaf){cancelAnimationFrame(tmRaf);tmRaf=null}
+  if(tmWebcam){
+    try{tmWebcam.stop()}catch(e){}
+    tmWebcam=null;
+  }
+  const box=$("webcamBox");
+  if(box)box.innerHTML='<span id="webcamPlaceholder">WEBCAM PREVIEW</span>';
+  if($("camStartBtn"))$("camStartBtn").disabled=!tmModel;
+  if($("camStopBtn"))$("camStopBtn").disabled=true;
+  if(wasRunning){
+    $("predLabel").textContent="WAITING...";
+    $("predConf").textContent="—";
+    document.querySelectorAll("#predBars .bar-fill").forEach(f=>f.style.width="0");
+    document.querySelectorAll("#predBars .bval").forEach(v=>v.textContent="0%");
+    document.querySelectorAll("#predBars .bar-row").forEach(r=>r.classList.remove("top"));
+    setAiBadge(tmModel?"MODEL SIAP · "+tmLabels.length+" KELAS":"MODEL BELUM DIMUAT",tmModel?"ok":"");
+    addLog("AI: kamera dimatikan","info");
+    // kalau tadi AI sempat menggerakkan robot, hentikan
+    if(aiSettings.auto&&aiLastCmd&&connected)send("stop");
+    aiLastCmd=null;
+    aiHistory=[];
+    $("aiSent").textContent="—";
+    setAiState("Kamera mati. Nyalakan kamera untuk mulai mendeteksi.");
+  }
+}
+function setAiState(msg,warn){
+  const el=$("aiState");
+  el.textContent=msg;
+  el.classList.toggle("warn",!!warn);
+}
+// Ganti mirror saat kamera sedang jalan -> restart kamera supaya langsung berlaku
+async function onFlipChange(){
+  saveAiSettings();
+  addLog("AI: mirror kamera "+(aiSettings.flip?"ON":"OFF"),"info");
+  if(tmRunning){ stopCam(); await startCam(); }
+}
+let aiBusy=false;
+async function aiLoop(){
+  if(!tmRunning||!tmWebcam)return;
+  tmWebcam.update();
+  if(!aiBusy){
+    aiBusy=true;
+    try{await aiPredict()}catch(e){addLog("AI: error prediksi — "+e.message,"err")}
+    aiBusy=false;
+  }
+  if(tmRunning)tmRaf=requestAnimationFrame(aiLoop);
+}
+async function aiPredict(){
+  if(!tmModel||!tmWebcam)return;
+  const preds=await tmModel.predict(tmWebcam.canvas);
+  if(!tmRunning)return;
+
+  // rata-rata beberapa frame terakhir (per kelas)
+  aiHistory.push(preds.map(p=>p.probability));
+  if(aiHistory.length>AI_SMOOTH_FRAMES)aiHistory.shift();
+  const avg=preds.map((_,i)=>aiHistory.reduce((s,h)=>s+h[i],0)/aiHistory.length);
+
+  let best=0;
+  avg.forEach((v,i)=>{
+    if(v>avg[best])best=i;
+    const row=$("bar-"+i);
+    if(row){
+      const p=Math.round(v*100);
+      row.querySelector(".bar-fill").style.width=p+"%";
+      row.querySelector(".bval").textContent=p+"%";
+    }
+  });
+  document.querySelectorAll("#predBars .bar-row").forEach((r,i)=>r.classList.toggle("top",i===best));
+  const name=preds[best].className;
+  const pct=Math.round(avg[best]*100);
+  $("predLabel").textContent=name.toUpperCase();
+  $("predConf").textContent=pct+"%";
+
+  // keputusan: apa yang dikirim ke micro:bit, dan kenapa
+  if(!aiSettings.auto){
+    setAiState("Kirim otomatis MATI — tidak ada command yang dikirim dari kamera. Aktifkan di kartu \"Kirim hasil ke robot\" di bawah.",true);
+    return;
+  }
+  if(aiHistory.length<AI_MIN_FRAMES){ setAiState("Menstabilkan prediksi..."); return; }
+  if(pct<aiSettings.threshold){
+    setAiState("Menahan command terakhir"+(aiLastCmd?" ("+aiLastCmd+")":"")+" — keyakinan "+name.toUpperCase()+" baru "+pct+"%, di bawah ambang "+aiSettings.threshold+"%.",true);
+    return;
+  }
+  const cmd=(aiSettings.map[name]!==undefined)?aiSettings.map[name]:name.toLowerCase();
+  if(!cmd){ setAiState("Kelas "+name.toUpperCase()+" tidak punya command (kolom mapping kosong)."); return; }
+  if(cmd!==aiLastCmd){
+    aiLastCmd=cmd;
+    addLog("AI: "+name.toUpperCase()+" "+pct+"% → kirim \""+cmd+"\"","ok");
+    send(cmd);
+  }
+  $("aiSent").textContent=aiLastCmd;
+  setAiState("Mengirim command \""+aiLastCmd+"\" (dari kelas "+name.toUpperCase()+", "+pct+"%).");
+}
+// pulihkan pengaturan AI tersimpan
+$("tmUrl").value=aiSettings.url||"";
+$("aiAuto").checked=!!aiSettings.auto;
+$("aiFlip").checked=aiSettings.flip!==false;
+$("aiThreshold").value=aiSettings.threshold;
+$("aiThresholdVal").textContent=aiSettings.threshold+"%";
+$("tmUrl").addEventListener("keydown",e=>{if(e.key==="Enter")loadAiModel()});
+
+/* ===== TinyBit Controller (DPAD configurable dari Widget Builder) ===== */
+let dpadConfig=null;
+try{dpadConfig=JSON.parse(localStorage.getItem("microbit_dpad")||"null");}catch(e){dpadConfig=null;}
+if(!dpadConfig){dpadConfig={up:"up",down:"down",left:"left",right:"right",center:"circle",stop:"stop"};}
+let ctrlMode="touch"; // "touch" atau "keyboard"
+
+function setControllerMode(mode){
+  ctrlMode=mode;
+  releaseDpad();
+  renderDpadController();
+  addLog("Controller mode → "+mode.toUpperCase(),"info");
+}
+function renderDpadController(){
+  const wrap=$("dpadWrap");
+  if(!wrap)return;
+  if(!dpadConfig){
+    wrap.innerHTML='<div class="dpad-empty">Belum ada controller. Tambahkan widget tipe "DPAD (TinyBit Controller)" di tab WIDGET.</div>';
+    return;
+  }
+  wrap.innerHTML=
+    '<div class="mode-switcher">'+
+      '<button class="mode-btn '+(ctrlMode==="touch"?"active":"")+'" onclick="setControllerMode(\'touch\')">TOUCH / MOUSE</button>'+
+      '<button class="mode-btn '+(ctrlMode==="keyboard"?"active":"")+'" onclick="setControllerMode(\'keyboard\')">KEYBOARD (WASD)</button>'+
+    '</div>'+
+    '<div class="dpad-circle">'+
+      '<div id="dbtn-up" class="dbtn up">↑</div>'+
+      '<div id="dbtn-left" class="dbtn left">←</div>'+
+      '<div id="dbtn-center" class="dbtn center">◎</div>'+
+      '<div id="dbtn-right" class="dbtn right">→</div>'+
+      '<div id="dbtn-down" class="dbtn down">↓</div>'+
+    '</div>'+
+    '<div class="hint-label" style="margin-top:14px">'+
+      (ctrlMode==="touch"
+        ? "TEKAN & TAHAN TOMBOL DI ATAS — LEPAS UNTUK BERHENTI"
+        : "TEKAN W A S D DI KEYBOARD — SPASI UNTUK TOMBOL TENGAH")+
+    '</div>';
+
+  if(ctrlMode==="touch"){
+    const dirs=[["up","up"],["down","down"],["left","left"],["right","right"],["center","center"]];
+    dirs.forEach(([id,key])=>{
+      const btn=$("dbtn-"+id);
+      btn.onpointerdown=e=>{
+        e.preventDefault();
+        btn.setPointerCapture(e.pointerId);
+        btn.classList.add("pressed");
+        send(dpadConfig[key]);
+      }
+      btn.onpointerup=()=>{ btn.classList.remove("pressed"); send(dpadConfig.stop); }
+      btn.onpointercancel=()=>{ btn.classList.remove("pressed"); send(dpadConfig.stop); }
+    });
+  }
+}
+function releaseDpad(){
+  document.querySelectorAll(".dpad-circle .dbtn").forEach(b=>b.classList.remove("pressed"));
+}
+
+/* Keyboard WASD — cuma aktif kalau mode="keyboard" dan dpad sudah dikonfigurasi */
+const wasdMap={w:"up",s:"down",a:"left",d:"right"," ":"center",arrowup:"up",arrowdown:"down",arrowleft:"left",arrowright:"right"};
+let heldWasdKey=null;
+document.addEventListener("keydown",e=>{
+  if($("loginScreen").classList.contains("hidden")===false)return;
+  if(["INPUT","TEXTAREA","SELECT"].includes(document.activeElement.tagName))return;
+  if(ctrlMode!=="keyboard"||!dpadConfig)return;
+
+  const key=e.key.toLowerCase();
+  const dir=wasdMap[key];
+  if(dir){
+    e.preventDefault();
+    if(!e.repeat){
+      heldWasdKey=key;
+      send(dpadConfig[dir]);
+      const btn=$("dbtn-"+dir); if(btn)btn.classList.add("pressed");
+    }
+  }
+});
+window.addEventListener("keyup",e=>{
+  if(ctrlMode!=="keyboard"||!dpadConfig)return;
+  const key=e.key.toLowerCase();
+  const dir=wasdMap[key];
+  if(dir){
+    send(dpadConfig.stop);
+    const btn=$("dbtn-"+dir); if(btn)btn.classList.remove("pressed");
+    if(heldWasdKey===key)heldWasdKey=null;
+  }
+});
+window.addEventListener("blur",()=>{
+  if(ctrlMode==="keyboard"&&dpadConfig&&heldWasdKey){
+    send(dpadConfig.stop); releaseDpad(); heldWasdKey=null;
+  }
+});
+
+/* ===== Custom Pages ===== */
+let pages=JSON.parse(localStorage.getItem("microbit_pages")||"[]");
+function slugify(name){
+  return "page-"+name.trim().toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"")||("page-"+Date.now());
+}
+function addPage(){
+  const name=$("pageName").value.trim();
+  if(!name){addLog("Nama page wajib diisi","err");return}
+  const id=slugify(name);
+  if(pages.find(p=>p.id===id)){addLog("Page dengan nama itu sudah ada","err");return}
+  pages.push({id,name});
+  localStorage.setItem("microbit_pages",JSON.stringify(pages));
+  $("pageName").value="";
+  renderPages();
+  addLog("Page baru dibuat — "+name,"ok");
+}
+function removePage(id){
+  const p=pages.find(p=>p.id===id);
+  pages=pages.filter(p=>p.id!==id);
+  widgets=widgets.filter(w=>!(w.kind==="BUTTON"&&w.page===id)); // custom button di page itu ikut terhapus
+  localStorage.setItem("microbit_pages",JSON.stringify(pages));
+  localStorage.setItem("microbit_widgets",JSON.stringify(widgets));
+  const nav=document.querySelector('.tab[data-page="'+id+'"]');
+  if(nav)nav.remove();
+  const sec=$(id);
+  if(sec)sec.remove();
+  renderPages();
+  renderWidgets();
+  if(p)addLog("Page dihapus — "+p.name,"info");
+}
+function renderPages(){
+  // pastikan tab + section ada untuk tiap custom page
+  pages.forEach(p=>{
+    if(!document.querySelector('.tab[data-page="'+p.id+'"]')){
+      const btn=document.createElement("button");
+      btn.className="tab";btn.dataset.page=p.id;btn.textContent=p.name.toUpperCase();
+      btn.onclick=()=>tab(p.id,btn);
+      $("tabsNav").appendChild(btn);
+    }
+    if(!$(p.id)){
+      const sec=document.createElement("section");
+      sec.className="page";sec.id=p.id;
+      sec.innerHTML=
+        '<h2 class="section-title">'+p.name.toUpperCase()+'</h2>'+
+        '<div class="card">'+
+          '<div class="card-title">CUSTOM BUTTONS</div>'+
+          '<div class="widget-list" style="margin-top:14px" data-btn-container="'+p.id+'"></div>'+
+          '<p class="note empty-note" style="margin-top:10px">Belum ada tombol di page ini. Tambahkan lewat tab WIDGET, pilih tipe CUSTOM BUTTON.</p>'+
+        '</div>';
+      $("customPages").appendChild(sec);
+    }
+  });
+  // dropdown target page di form widget builder
+  const sel=$("wPage");
+  if(sel){
+    sel.innerHTML=pages.length
+      ? pages.map(p=>'<option value="'+p.id+'">'+p.name+'</option>').join("")
+      : '<option value="">— buat page dulu —</option>';
+  }
+  // list page di card "BUAT PAGE BARU"
+  const list=$("pageList");
+  if(list){
+    list.innerHTML="";
+    $("pageEmpty").style.display=pages.length?"none":"block";
+    pages.forEach(p=>{
+      const el=document.createElement("div");
+      el.className="widget-card";
+      el.innerHTML='<b>'+p.name+'</b><button class="btn danger" style="width:100%;margin-top:10px" onclick="removePage(\''+p.id+'\')">HAPUS PAGE</button>';
+      list.appendChild(el);
+    });
+  }
+}
+
+/* ===== Widget Builder (DATA + CUSTOM BUTTON) ===== */
+let widgets=JSON.parse(localStorage.getItem("microbit_widgets")||"[]").map(w=>w.kind?w:{...w,kind:"DATA"});
+
+function updateWidgetFormFields(){
+  const isButton=$("wKind").value==="BUTTON";
+  $("wDataFields").classList.toggle("hidden",isButton);
+  $("wButtonFields").classList.toggle("hidden",!isButton);
+}
+
+function renderWidgets(){
+  // --- widget DATA ---
+  const dataWidgets=widgets.filter(w=>w.kind==="DATA");
+  const list=$("widgetList");
+  list.innerHTML="";
+  $("widgetEmpty").style.display=dataWidgets.length?"none":"block";
+  dataWidgets.forEach(w=>{
+    const gi=widgets.indexOf(w);
+    const el=document.createElement("div");
+    el.className="widget-card";
+    el.dataset.key=w.key;
+    el.innerHTML=
+      '<small>'+w.type+' • '+w.key+'</small>'+
+      '<b>'+w.name+'</b>'+
+      '<div class="value" style="font-size:16px;margin-top:8px">— <span class="unit" style="display:inline;text-align:left">'+(w.unit||'')+'</span></div>'+
+      '<button class="btn danger" style="width:100%;margin-top:10px" onclick="removeWidget('+gi+')">HAPUS</button>';
+    list.appendChild(el);
+  });
+
+  // --- custom button, dikelompokkan per page ---
+  document.querySelectorAll("[data-btn-container]").forEach(container=>{
+    const pageId=container.dataset.btnContainer;
+    container.innerHTML="";
+    const buttons=widgets.filter(w=>w.kind==="BUTTON"&&w.page===pageId);
+    const emptyNote=container.parentElement.querySelector(".empty-note");
+    if(emptyNote)emptyNote.style.display=buttons.length?"none":"block";
+    buttons.forEach(w=>{
+      const gi=widgets.indexOf(w);
+      const wrap=document.createElement("div");
+      wrap.className="widget-card";
+      wrap.innerHTML=
+        '<small>CUSTOM BUTTON'+(w.release?' • hold':'')+'</small>'+
+        '<button class="btn primary custom-button" style="width:100%;height:44px;font-size:12px" data-press="'+w.press+'" data-release="'+(w.release||"")+'">'+w.name+'</button>'+
+        '<button class="btn danger" style="width:100%;margin-top:8px" onclick="removeWidget('+gi+')">HAPUS</button>';
+      container.appendChild(wrap);
+    });
+  });
+  bindCustomButtons();
+}
+function bindCustomButtons(){
+  document.querySelectorAll(".custom-button").forEach(b=>{
+    if(b.dataset.bound)return; // hindari double-bind
+    b.dataset.bound="1";
+    const press=b.dataset.press, release=b.dataset.release;
+    if(release){
+      b.onpointerdown=e=>{e.preventDefault();b.setPointerCapture(e.pointerId);send(press)}
+      b.onpointerup=()=>send(release)
+      b.onpointercancel=()=>send(release)
+    }else{
+      b.onclick=()=>send(press);
+    }
+  });
+}
+function addWidget(){
+  const kind=$("wKind").value;
+  const name=$("wName").value.trim();
+  if(!name){addLog("Widget builder: nama/label wajib diisi","err");return}
+
+  if(kind==="DATA"){
+    const type=$("wType").value;
+    const key=$("wKey").value.trim();
+    const unit=$("wUnit").value.trim();
+    if(!key){addLog("Widget builder: data key wajib diisi","err");return}
+    widgets.push({kind:"DATA",name,type,key,unit});
+    $("wKey").value="";$("wUnit").value="";
+    addLog("Widget data ditambahkan — "+name+" ("+type+")","ok");
+  }else{
+    const press=$("wPress").value.trim();
+    const release=$("wRelease").value.trim();
+    const page=$("wPage").value;
+    if(!press){addLog("Widget builder: command saat ditekan wajib diisi","err");return}
+    if(!page){addLog("Widget builder: buat page dulu sebelum menambahkan custom button","err");return}
+    widgets.push({kind:"BUTTON",name,press,release,page});
+    $("wPress").value="";$("wRelease").value="";
+    addLog("Custom button ditambahkan — "+name+" ("+press+(release?"/"+release:"")+")","ok");
+  }
+  $("wName").value="";
+  localStorage.setItem("microbit_widgets",JSON.stringify(widgets));
+  renderWidgets();
+}
+function removeWidget(i){
+  const w=widgets[i];
+  widgets.splice(i,1);
+  localStorage.setItem("microbit_widgets",JSON.stringify(widgets));
+  renderWidgets();
+  addLog("Widget dihapus — "+w.name,"info");
+}
+renderPages();
+renderWidgets();
+updateWidgetFormFields();
+renderDpadController();
+
+const savedUser=localStorage.getItem("microbit_user");
+if(savedUser){
+  setUser(savedUser);
+  $("loginScreen").classList.add("hidden");
+  $("app").classList.remove("hidden");
+}
+addLog("Dashboard ready","ok");
+addLog("Waiting for Micro:bit connection","info");
+</script>
+</body>
+</html>
