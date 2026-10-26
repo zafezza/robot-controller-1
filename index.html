@@ -182,19 +182,223 @@ body.dark .widget-card{background:#202428;border-color:#30353b}
   .stats{grid-template-columns:1fr 1fr}
   .url-row{flex-direction:column}.url-row .btn{width:100%}
 }
+
+/* ===== Clean theme (override) ===== */
+:root{--bg:#f7f7f8;--surface:#fff;--surface2:#f4f5f6;--line:#ececee;--muted:#80848c;--r:14px;--sh:0 1px 2px rgba(0,0,0,.03)}
+body.dark{--bg:#0f1113;--surface:#17191c;--surface2:#1f2226;--line:#272b30;--muted:#8f949c}
+body{background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
+.shell{max-width:1080px;padding:28px 24px}
+.card,.controller-card,.topbar,.login-box,body.dark .card,body.dark .controller-card,body.dark .topbar,body.dark .login-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh)}
+.card,.controller-card{padding:22px}
+.login,body.dark .login{background:var(--bg)}
+.login-box{padding:36px}
+.grid,.robot-layout,.ai-grid{gap:16px}
+.topbar{height:60px}
+.section-title{font-size:12px;letter-spacing:.8px;color:var(--muted);font-weight:600;margin:0 0 14px}
+.card-title,.controller-head h2{font-size:12px;font-weight:600;letter-spacing:.3px}
+.value{font-size:26px;font-weight:700}
+.note,.unit,.hint-label,.brand-sub{color:var(--muted)}
+.label,body.dark .label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.2px}
+
+/* Tabs → segmented pill */
+.tabs{display:inline-flex;max-width:100%;gap:4px;margin:22px 0 26px;padding:4px;background:var(--surface2);border:1px solid var(--line);border-radius:12px}
+.tab,body.dark .tab{border:0!important;border-radius:9px;padding:8px 16px;color:var(--muted);transition:.15s}
+.tab:hover{color:var(--text)}
+.tab.active,body.dark .tab.active{background:var(--surface);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+
+/* Buttons & inputs */
+.btn,body.dark .btn,.theme-toggle,body.dark .theme-toggle{height:36px;border-radius:9px;background:var(--surface);border:1px solid var(--line);color:var(--text);font-weight:600;transition:.15s}
+.theme-toggle,body.dark .theme-toggle{width:36px;border-radius:50%}
+.btn:hover,.theme-toggle:hover,body.dark .btn:hover,body.dark .theme-toggle:hover{background:var(--surface2);transform:none}
+.btn.primary,body.dark .btn.primary{background:var(--text);color:var(--bg);border-color:var(--text)}
+.btn.primary:hover,body.dark .btn.primary:hover{background:var(--text);opacity:.88}
+.btn.danger,.estop{color:var(--accent)!important}
+.input,body.dark .input{height:42px;border-radius:10px;background:var(--surface);border:1px solid var(--line);color:var(--text)}
+.input:focus,body.dark .input:focus{border-color:var(--muted);box-shadow:0 0 0 3px var(--surface2)}
+.login-btn{height:44px;background:var(--text);color:var(--bg)}
+
+/* Soft panels */
+.stat,.command,.widget-card,.mode-switcher,body.dark .stat,body.dark .command,body.dark .widget-card,body.dark .mode-switcher{background:var(--surface2);border:1px solid var(--line);border-radius:10px;color:var(--text)}
+.stat small,.widget-card small{color:var(--muted)}
+.mode-btn{color:var(--muted);border-radius:7px}
+.mode-btn.active,body.dark .mode-btn.active{background:var(--surface);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.chart,.profile-preview{border-color:var(--line)}
+.chart-grid line,body.dark .chart-grid line{stroke:var(--line)}
+.badge,body.dark .badge{background:var(--surface2);color:var(--muted);font-weight:600}
+.badge.ok,body.dark .badge.ok{background:#e8f6ee;color:#17784a}
+body.dark .badge.ok{background:#14301f;color:#6fd39a}
+
+/* D-pad: tanpa garis putus-putus */
+.dpad-circle,body.dark .dpad-circle{background:var(--surface2);border:0;padding:20px}
+.dpad-circle .dbtn,body.dark .dpad-circle .dbtn{background:var(--surface);border:1px solid var(--line);color:var(--text);border-radius:14px;box-shadow:0 1px 2px rgba(0,0,0,.08);transition:.12s}
+.dpad-circle .dbtn.pressed,body.dark .dpad-circle .dbtn.pressed{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* Log */
+.log,body.dark .log{background:var(--surface2);color:var(--text);border:1px solid var(--line)}
+.log .info{color:var(--muted)}.log .ok{color:#17784a}.log .err{color:#d03a40}
+body.dark .log .ok{color:#63d391}body.dark .log .err{color:#f17b80}
+.webcam,body.dark .webcam{background:#14161a;border-radius:10px}
+
+/* Profile menu */
+.profile-menu,body.dark .profile-menu{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.12)}
+.profile-item,body.dark .profile-item{background:transparent;color:var(--text)}
+.profile-item:hover,body.dark .profile-item:hover{background:var(--surface2)}
+.profile-item.logout-item{color:var(--accent)}
+
+@media(max-width:800px){.tabs{display:flex;overflow-x:auto}.shell{padding:14px}}
+
+/* Login */
+.login-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.login-top .login-mark{margin-bottom:0}
+.login-status{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);background:var(--surface2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:-8px 0 24px}
+.pw-wrap{position:relative}
+.pw-wrap .input{padding-right:76px}
+.pw-toggle{position:absolute;right:6px;top:6px;height:30px;padding:0 10px;border:0;border-radius:7px;background:transparent;color:var(--muted);font-size:10px;font-weight:700;letter-spacing:.4px}
+.pw-toggle:hover{background:var(--surface2);color:var(--text)}
+.error{transition:opacity .15s}
+
+
+/* ===== Soft Pink + White UI refresh ===== */
+:root{
+  --bg:#fff8fb;--surface:#ffffff;--surface2:#fff0f6;--line:#f1dfe8;
+  --text:#302631;--muted:#8f7d89;--accent:#df78a7;--accent-soft:#fde8f1;
+  --green:#269b70;--blue:#d879a4;--shadow:0 8px 26px rgba(186,105,145,.07);
+  --sh:0 5px 20px rgba(186,105,145,.06);--r:16px;
+  color-scheme:light;
+}
+body{background:var(--bg);color:var(--text);transition:background-color .25s ease,color .25s ease}
+body.dark{
+  --bg:#19151a;--surface:#231d24;--surface2:#2c232c;--line:#3c2d39;
+  --text:#fff5fa;--muted:#bba8b5;--accent:#e58bb5;--accent-soft:#402737;
+  --shadow:0 8px 26px rgba(0,0,0,.16);--sh:0 5px 20px rgba(0,0,0,.12);
+  color-scheme:dark;
+}
+.shell{max-width:1160px;padding:28px 24px}
+.topbar,.card,.controller-card,.login-box{
+  border-color:var(--line);border-radius:16px;box-shadow:var(--sh);
+  transition:background-color .22s ease,border-color .22s ease,box-shadow .22s ease,transform .22s ease;
+}
+.topbar{height:66px;padding:0 18px}
+.brand-mark,.avatar,.login-mark{background:#e879aa;color:#fff;border-radius:11px}
+.brand-name{letter-spacing:-.2px}
+.tabs{background:#fff0f6;border-color:#f4dce7;border-radius:13px;padding:5px;gap:4px}
+.tab{border-radius:9px!important;padding:9px 15px;color:#9b8190}
+.tab.active{background:#fff!important;color:#b94f81!important;box-shadow:0 2px 8px rgba(190,92,139,.12)!important}
+.section-title{font-size:12px;letter-spacing:.7px;color:#a56e89;margin-bottom:15px}
+.card,.controller-card{padding:21px}
+.card:hover,.controller-card:hover{box-shadow:0 10px 30px rgba(186,105,145,.09)}
+.card-title,.controller-head h2{color:var(--text);letter-spacing:.25px}
+.btn,.theme-toggle,body.dark .btn,body.dark .theme-toggle{
+  border-color:var(--line);border-radius:10px;background:var(--surface);color:var(--text);
+  transition:background-color .18s ease,border-color .18s ease,color .18s ease,box-shadow .18s ease,transform .18s ease;
+}
+.btn:hover,.theme-toggle:hover,body.dark .btn:hover,body.dark .theme-toggle:hover{
+  background:var(--surface2);border-color:#e8b6cd;transform:translateY(-1px)
+}
+.btn.primary,body.dark .btn.primary,.login-btn{
+  background:#df78a7;color:#fff;border-color:#df78a7;box-shadow:0 3px 9px rgba(223,120,167,.18)
+}
+.btn.primary:hover,body.dark .btn.primary:hover,.login-btn:hover{background:#cf6394;border-color:#cf6394;opacity:1}
+.input,body.dark .input{border-radius:11px;border-color:var(--line);transition:border-color .18s ease,box-shadow .18s ease,background-color .18s ease}
+.input:focus,body.dark .input:focus{border-color:#df78a7;box-shadow:0 0 0 3px rgba(223,120,167,.15)}
+.login,body.dark .login{background:var(--bg)}
+.login-box{padding:36px}
+.login h1{letter-spacing:-.7px}
+.login p{line-height:1.7}
+.stat,.command,.widget-card,.mode-switcher,body.dark .stat,body.dark .command,body.dark .widget-card,body.dark .mode-switcher{
+  background:var(--surface2);border-color:var(--line);border-radius:12px
+}
+.badge,body.dark .badge{background:#fff0f6;color:#a95b80;border:1px solid #f4dce7}
+.badge.ok,body.dark .badge.ok{background:#eaf8f0;color:#17784a;border-color:#d5efdf}
+.badge.err,body.dark .badge.err{background:#fff0f0;color:#bd3e58;border-color:#f7d6dc}
+.range{accent-color:var(--accent)}
+.switch-row input[type=checkbox]{accent-color:var(--accent)}
+.dpad-circle,body.dark .dpad-circle{background:var(--surface2);border:1px solid var(--line);border-radius:24px}
+.dpad-circle .dbtn,body.dark .dpad-circle .dbtn{border-color:#f0c9da;border-radius:15px;box-shadow:0 3px 8px rgba(186,105,145,.08);transition:transform .15s ease,background-color .15s ease,border-color .15s ease}
+.dpad-circle .dbtn:hover{border-color:var(--accent);transform:translateY(-1px)}
+.dpad-circle .dbtn.pressed,body.dark .dpad-circle .dbtn.pressed{background:var(--accent);border-color:var(--accent);color:#fff;transform:scale(.96)}
+.mode-btn.active,body.dark .mode-btn.active{background:var(--surface);color:#b94f81;box-shadow:0 2px 7px rgba(190,92,139,.12)}
+.bar-fill{background:#e8a0bf;transition:width .22s ease}
+.bar-row.top .bar-fill{background:var(--accent)}
+.chart{border-color:var(--line)}
+.chart-grid line,body.dark .chart-grid line{stroke:var(--line)}
+.log,body.dark .log{border-radius:12px;background:var(--surface2);border-color:var(--line)}
+.webcam,body.dark .webcam{border-radius:12px}
+.profile-menu,body.dark .profile-menu{border-color:var(--line);border-radius:14px}
+.profile-item:hover,body.dark .profile-item:hover{background:var(--surface2)}
+.estop,.btn.danger{color:#c43e59!important}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #df78a7;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@media(max-width:800px){.shell{padding:14px}.card,.controller-card{padding:17px}.tabs{margin:18px 0 22px}}
+
+/* ===== Sidebar dashboard layout ===== */
+.section-title{display:none}
+.shell{max-width:none;margin:0;padding:0;display:grid;grid-template-columns:268px minmax(0,1fr);min-height:100vh;align-items:start}
+.sidebar{position:sticky;top:16px;height:calc(100vh - 32px);margin:16px 0 16px 16px;padding:14px;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--sh)}
+.side-brand{display:flex;align-items:center;gap:11px;padding:4px 6px 14px;margin-bottom:12px;border-bottom:1px solid var(--line)}
+.side-brand .brand-name{font-size:14px;font-weight:700}
+.sidebar .tabs,body.dark .sidebar .tabs{display:flex;flex-direction:column;gap:2px;margin:0;padding:0;background:none;border:0;border-radius:0;overflow:visible}
+body .sidebar .tab,body.dark .sidebar .tab{display:flex;align-items:center;gap:12px;width:100%;padding:10px 12px;font-size:13px;font-weight:500;text-align:left;color:var(--text)}
+.sidebar .tab::before{content:"";width:18px;height:18px;border-radius:5px;background:var(--accent-soft)}
+.sidebar .tab:has(svg)::before{display:none}
+.sidebar .tab svg,.side-link svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sidebar .tab:hover{background:var(--surface2)}
+.sidebar .tabs .tab.active,body.dark .sidebar .tabs .tab.active{background:var(--accent-soft)!important;color:var(--accent)!important;box-shadow:inset 3px 0 0 var(--accent)!important;font-weight:600}
+.side-bottom{margin-top:auto;display:grid;gap:2px;padding-top:12px}
+.side-link{display:flex;align-items:center;gap:12px;border:0;background:none;padding:10px 12px;border-radius:10px;color:var(--text);font-size:13px;text-align:left}
+.side-link:hover{background:var(--surface2)}
+.user-card{display:flex;align-items:center;gap:10px;margin-top:8px;padding:12px 8px 4px;border-top:1px solid var(--line)}
+.user-info{flex:1;min-width:0}
+.user-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.profile-menu,body.dark .profile-menu{top:auto;bottom:calc(100% + 6px);left:0;width:100%}
+.content{padding:28px 32px 40px;min-width:0}
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:24px}
+.page-head h1{font-size:28px;letter-spacing:-.6px;margin:0}
+.greet{font-size:13px;margin-top:12px}
+.card-title{font-size:14px;font-weight:700}
+.card-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.card-foot{font-size:12px;margin-top:14px}
+.value{font-size:22px}
+#sensor .grid{grid-template-columns:repeat(3,1fr)}
+#sensor .chart{border:0;height:130px;margin-top:14px}
+#sensor .chart path{vector-effect:non-scaling-stroke}
+.donut-wrap{display:grid;place-items:center;height:130px;margin-top:14px}
+.donut-wrap svg{width:130px;height:130px}
+.donut-num{font-size:22px;font-weight:700;fill:var(--text)}
+.donut-lbl{font-size:9px;fill:var(--muted)}
+body.dark .donut-wrap circle:first-child{stroke:#402737}
+@media(max-width:1100px){#sensor .grid{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){
+  .shell{display:block}
+  .sidebar{position:static;height:auto;margin:12px}
+  .sidebar .tabs{flex-direction:row;overflow-x:auto}
+  body .sidebar .tab{width:auto;white-space:nowrap}
+  .side-bottom{margin-top:12px}
+  .content{padding:16px}
+  .page-head{flex-direction:column}
+}
+@media(max-width:600px){#sensor .grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
 <section id="loginScreen" class="login">
   <div class="login-box">
-    <div class="login-mark">MB</div>
+    <div class="login-top">
+      <div class="login-mark">MB</div>
+      <button type="button" class="theme-toggle" onclick="toggleDarkMode()" aria-label="Ganti tema" title="Ganti tema"><span id="loginThemeIcon">☾</span></button>
+    </div>
     <h1>Micro:bit Dashboard</h1>
     <p>Masuk untuk mengakses controller dan monitoring robot.</p>
+    <div class="login-status"><span class="dot"></span>Micro:bit belum terhubung • sambungkan setelah masuk</div>
     <label class="label">USERNAME</label>
-    <input id="user" class="input" placeholder="Username" autocomplete="username">
+    <input id="user" class="input" placeholder="Username" autocomplete="username" autofocus>
     <label class="label">PASSWORD</label>
-    <input id="pass" class="input" type="password" placeholder="Password" autocomplete="current-password">
+    <div class="pw-wrap">
+      <input id="pass" class="input" type="password" placeholder="Password" autocomplete="current-password">
+      <button type="button" id="pwToggle" class="pw-toggle" onclick="togglePw()" aria-label="Lihat password">LIHAT</button>
+    </div>
     <div id="error" class="error"></div>
     <button class="login-btn" onclick="login()">Sign in</button>
     <p class="login-hint">Prototype login • data akun hanya tersimpan di browser</p>
@@ -202,53 +406,66 @@ body.dark .widget-card{background:#202428;border-color:#30353b}
 </section>
 
 <main id="app" class="shell hidden">
-  <header class="topbar">
-    <div class="brand profile-trigger" onclick="toggleProfile(event)">
-      <div id="avatar" class="avatar">MB</div>
-      <div><div id="userDisplay" class="brand-name">micro:bit dashboard</div><div class="brand-sub">ROBOT • SENSOR • CONTROL</div></div>
-      <span class="profile-chevron">⌄</span>
-      <div id="profileMenu" class="profile-menu" onclick="event.stopPropagation()">
-        <div class="profile-preview">
-          <div id="menuAvatar" class="avatar large">MB</div>
-          <div>
-            <strong id="menuUser">User</strong>
-            <small>Micro:bit operator</small>
+  <aside class="sidebar">
+    <div class="side-brand"><div class="brand-mark">MB</div><div><div class="brand-name">Micro:bit</div><div class="brand-sub">ROBOT • SENSOR • CONTROL</div></div></div>
+    <nav id="tabsNav" class="tabs">
+      <button class="tab active" onclick="tab('sensor',this)"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>Sensor</button>
+      <button class="tab" onclick="tab('robot',this)"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="10" rx="5"/><path d="M7 12h4M9 10v4"/><circle cx="16" cy="12" r="1"/></svg>TinyBit</button>
+      <button class="tab" onclick="tab('ai',this)"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>AI</button>
+      <button class="tab" onclick="tab('widget',this)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Widget</button>
+      <button class="tab" onclick="tab('log',this)"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Log</button>
+    </nav>
+    <div class="side-bottom">
+      <button class="side-link" onclick="toggleDarkMode()"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v18" /><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg>Ganti tema</button>
+      <button class="side-link" onclick="logout()"><svg viewBox="0 0 24 24"><path d="M9 4H5v16h4M16 8l4 4-4 4M20 12H9"/></svg>Log out</button>
+      <input id="photoInput" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+      <div class="profile-trigger user-card" onclick="toggleProfile(event)">
+        <div id="avatar" class="avatar">MB</div>
+        <div class="user-info"><div id="userDisplay" class="user-name">operator</div><div class="user-sub">Micro:bit operator</div></div>
+        <span class="profile-chevron">⌃</span>
+        <div id="profileMenu" class="profile-menu" onclick="event.stopPropagation()">
+          <div class="profile-preview">
+            <div id="menuAvatar" class="avatar large">MB</div>
+            <div><strong id="menuUser">User</strong><small>Micro:bit operator</small></div>
           </div>
+          <button class="profile-item" onclick="changePhoto()">Change profile photo</button>
+          <button class="profile-item" onclick="removePhoto()">Remove photo</button>
+          <button class="profile-item logout-item" onclick="logout()">Log out</button>
         </div>
-        <button class="profile-item" onclick="changePhoto()">Change profile photo</button>
-        <button class="profile-item" onclick="removePhoto()">Remove photo</button>
-        <button class="profile-item logout-item" onclick="logout()">Log out</button>
       </div>
     </div>
-    <input id="photoInput" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+  </aside>
+
+  <div class="content">
+  <header class="page-head">
+    <div><h1 id="pageTitle">Sensor</h1><div class="greet">Hello, <b id="greetUser">operator</b></div></div>
     <div class="top-actions">
       <div class="connection"><span id="dot" class="dot"></span><span id="status">OFFLINE</span></div>
-      <button id="themeBtn" class="theme-toggle" onclick="toggleDarkMode()" aria-label="Toggle dark mode" title="Toggle theme"><span id="themeIcon">☾</span></button><button id="connect" class="btn primary" onclick="connect()">CONNECT</button>
-      <button class="btn" onclick="logout()">LOG OUT</button>
+      <button id="themeBtn" class="theme-toggle" onclick="toggleDarkMode()" aria-label="Toggle dark mode" title="Toggle theme"><span id="themeIcon">☾</span></button>
+      <button id="connect" class="btn primary" onclick="connect()">CONNECT</button>
     </div>
   </header>
 
-  <nav id="tabsNav" class="tabs">
-    <button class="tab active" onclick="tab('sensor',this)">SENSOR</button>
-    <button class="tab" onclick="tab('robot',this)">TINYBIT</button>
-    <button class="tab" onclick="tab('ai',this)">AI</button>
-    <button class="tab" onclick="tab('widget',this)">WIDGET</button>
-    <button class="tab" onclick="tab('log',this)">LOG</button>
-  </nav>
-
   <section id="sensor" class="page active">
-    <h2 class="section-title">INPUT SENSOR</h2>
     <div class="grid">
       <div class="card">
-        <div class="card-head"><div class="card-title">SUHU</div><div><div class="value">24</div><div class="unit">CELSIUS</div></div></div>
-        <div class="chart"><svg viewBox="0 0 500 110" preserveAspectRatio="none"><g class="chart-grid"><line x1="0" y1="30" x2="500" y2="30"/><line x1="0" y1="65" x2="500" y2="65"/><line x1="0" y1="100" x2="500" y2="100"/></g><polyline fill="none" stroke="#e5484d" stroke-width="2" points="0,80 45,73 90,76 135,61 180,66 225,52 270,57 315,46 360,50 405,35 450,42 500,31"/></svg></div>
+        <div class="card-head"><div><div class="card-title">Suhu</div><div class="card-sub">Realtime • Celsius</div></div><div><div class="value">24</div><div class="unit">CELSIUS</div></div></div>
+        <div class="chart"><svg viewBox="0 0 300 120" preserveAspectRatio="none"><g class="chart-grid"><line x1="0" y1="25" x2="300" y2="25"/><line x1="0" y1="65" x2="300" y2="65"/><line x1="0" y1="105" x2="300" y2="105"/></g><path fill="none" stroke="#e8648f" stroke-width="2" d="M0,80 C40,20 70,20 100,60 S160,110 190,70 S250,50 300,55"/><path fill="none" stroke="#f4a9c4" stroke-width="2" d="M0,100 C40,60 80,60 110,85 S170,90 200,80 S260,80 300,78"/></svg></div>
+        <div class="card-foot">Data berubah setelah Bluetooth tersambung</div>
       </div>
       <div class="card">
-        <div class="card-head"><div class="card-title">CAHAYA</div><div><div class="value">68</div><div class="unit">PERCENT</div></div></div>
-        <div class="chart"><svg viewBox="0 0 500 110" preserveAspectRatio="none"><g class="chart-grid"><line x1="0" y1="30" x2="500" y2="30"/><line x1="0" y1="65" x2="500" y2="65"/><line x1="0" y1="100" x2="500" y2="100"/></g><polyline fill="none" stroke="#4b7bec" stroke-width="2" points="0,70 50,67 100,73 150,58 200,61 250,48 300,54 350,39 400,44 450,30 500,35"/></svg></div>
+        <div class="card-head"><div><div class="card-title">Cahaya</div><div class="card-sub">Realtime • Persen</div></div><div><div class="value">68</div><div class="unit">PERCENT</div></div></div>
+        <div class="chart"><svg viewBox="0 0 300 120" preserveAspectRatio="none"><g class="chart-grid"><line x1="0" y1="25" x2="300" y2="25"/><line x1="0" y1="65" x2="300" y2="65"/><line x1="0" y1="105" x2="300" y2="105"/></g><rect x="12" y="60" width="30" height="50" rx="4" fill="#f9c6d8"/><rect x="12" y="65" width="30" height="45" rx="4" fill="#e8648f"/><rect x="59" y="20" width="30" height="90" rx="4" fill="#f9c6d8"/><rect x="59" y="50" width="30" height="60" rx="4" fill="#e8648f"/><rect x="106" y="50" width="30" height="60" rx="4" fill="#f9c6d8"/><rect x="106" y="70" width="30" height="40" rx="4" fill="#e8648f"/><rect x="153" y="65" width="30" height="45" rx="4" fill="#f9c6d8"/><rect x="153" y="95" width="30" height="15" rx="4" fill="#e8648f"/><rect x="200" y="55" width="30" height="55" rx="4" fill="#f9c6d8"/><rect x="200" y="70" width="30" height="40" rx="4" fill="#e8648f"/><rect x="247" y="50" width="30" height="60" rx="4" fill="#f9c6d8"/><rect x="247" y="65" width="30" height="45" rx="4" fill="#e8648f"/></svg></div>
+        <div class="card-foot">Data berubah setelah Bluetooth tersambung</div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><div class="card-title">Baterai</div><div class="card-sub">Micro:bit</div></div></div>
+        <div class="donut-wrap"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="42" fill="none" stroke="#fbd5e3" stroke-width="14"/><circle cx="60" cy="60" r="42" fill="none" stroke="#e8648f" stroke-width="14" stroke-linecap="round" stroke-dasharray="229.6 263.9" transform="rotate(-90 60 60)"/><text x="60" y="63" text-anchor="middle" class="donut-num">87%</text><text x="60" y="80" text-anchor="middle" class="donut-lbl">Battery</text></svg></div>
+        <div class="card-foot">Perkiraan daya tersisa</div>
       </div>
       <div class="card wide">
-        <div class="card-head"><div><div class="card-title">STATUS MICRO:BIT</div><div class="note">Data akan berubah setelah Bluetooth tersambung.</div></div><span id="sensorBadge" class="badge">DISCONNECTED</span></div>
+        <div class="card-head"><div><div class="card-title">Status Micro:bit</div><div class="card-sub">Data akan berubah setelah Bluetooth tersambung.</div></div><span id="sensorBadge" class="badge">DISCONNECTED</span></div>
+        <div class="chart" style="height:120px"><svg viewBox="0 0 600 120" preserveAspectRatio="none"><path d="M0,70 C100,20 200,10 300,50 S450,80 600,55 L600,120 L0,120Z" fill="rgba(232,100,143,.32)" stroke="#e8648f" stroke-width="1.5"/><path d="M0,100 C100,70 200,60 300,85 S450,100 600,90 L600,120 L0,120Z" fill="rgba(232,100,143,.2)" stroke="#f4a9c4" stroke-width="1.5"/></svg></div>
         <div class="stats">
           <div class="stat"><small>BATTERY</small><b>87%</b></div>
           <div class="stat"><small>COMMAND</small><b id="sensorCommand">STOP</b></div>
@@ -433,6 +650,7 @@ body.dark .widget-card{background:#202428;border-color:#30353b}
     <h2 class="section-title">ACTIVITY LOG</h2>
     <div id="logBox" class="log"></div>
   </section>
+  </div>
 </main>
 
 <!-- TensorFlow.js + Teachable Machine (image) -->
@@ -446,8 +664,7 @@ const $=id=>document.getElementById(id);
 function applyTheme(){
   const dark=localStorage.getItem("microbit_dark")==="1";
   document.body.classList.toggle("dark",dark);
-  const icon=$("themeIcon");
-  if(icon)icon.textContent=dark?"☀":"☾";
+  ["themeIcon","loginThemeIcon"].forEach(id=>{const el=$(id);if(el)el.textContent=dark?"☀":"☾";});
 }
 function toggleDarkMode(){
   const dark=!document.body.classList.contains("dark");
@@ -457,9 +674,19 @@ function toggleDarkMode(){
 }
 applyTheme();
 
+/* Isi ACCESS_PASSWORD kalau mau password benar-benar dicek (kosong = password apa saja diterima).
+   Catatan: ini hanya penghalang ringan karena kodenya ada di browser. */
+const ACCESS_PASSWORD="";
+function togglePw(){
+  const inp=$("pass"), show=inp.type==="password";
+  inp.type=show?"text":"password";
+  $("pwToggle").textContent=show?"SEMBUNYI":"LIHAT";
+}
 function login(){
   const u=$("user").value.trim(), p=$("pass").value;
-  if(!u||!p){$("error").textContent="Username dan password wajib diisi.";return}
+  if(!u||!p){$("error").textContent="Username dan password wajib diisi.";(u?$("pass"):$("user")).focus();return}
+  if(ACCESS_PASSWORD&&p!==ACCESS_PASSWORD){$("error").textContent="Password salah.";$("pass").select();return}
+  $("error").textContent="";
   localStorage.setItem("microbit_user",u);
   setUser(u);
   $("loginScreen").classList.add("hidden");$("app").classList.remove("hidden");
@@ -467,6 +694,7 @@ function login(){
 }
 function setUser(u){
   $("userDisplay").textContent=u;
+  $("greetUser").textContent=u;
   $("menuUser").textContent=u;
   const initials=u.slice(0,2).toUpperCase()||"MB";
   if(!$("avatar").querySelector("img")) $("avatar").textContent=initials;
@@ -477,7 +705,7 @@ function logout(){
   stopCam();
   localStorage.removeItem("microbit_user");
   $("app").classList.add("hidden");$("loginScreen").classList.remove("hidden");
-  $("user").value="";$("pass").value="";$("profileMenu").classList.remove("open");
+  $("user").value="";$("pass").value="";$("pass").type="password";$("pwToggle").textContent="LIHAT";$("error").textContent="";setTimeout(()=>$("user").focus(),0);$("profileMenu").classList.remove("open");
 }
 function toggleProfile(e){
   e.stopPropagation();
@@ -525,6 +753,7 @@ function tab(id,el){
   document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
   $(id).classList.add("active");
   document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));el.classList.add("active");
+  const pt=$("pageTitle");if(pt)pt.textContent=el.textContent.trim();
 }
 /* ===== Web Bluetooth — MakeCode UART service ===== */
 const UART_SERVICE="6e400001-b5a3-f393-e0a9-e50e24dcca9e";
@@ -1047,7 +1276,7 @@ function renderPages(){
   pages.forEach(p=>{
     if(!document.querySelector('.tab[data-page="'+p.id+'"]')){
       const btn=document.createElement("button");
-      btn.className="tab";btn.dataset.page=p.id;btn.textContent=p.name.toUpperCase();
+      btn.className="tab";btn.dataset.page=p.id;btn.textContent=p.name;
       btn.onclick=()=>tab(p.id,btn);
       $("tabsNav").appendChild(btn);
     }
@@ -1192,6 +1421,11 @@ if(savedUser){
   $("loginScreen").classList.add("hidden");
   $("app").classList.remove("hidden");
 }
+["user","pass"].forEach(id=>{
+  $(id).addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();login();}});
+  $(id).addEventListener("input",()=>{$("error").textContent="";});
+});
+if(!$("loginScreen").classList.contains("hidden"))$("user").focus();
 addLog("Dashboard ready","ok");
 addLog("Waiting for Micro:bit connection","info");
 </script>
