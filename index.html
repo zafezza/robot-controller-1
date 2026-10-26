@@ -283,6 +283,12 @@ body.dark .widget-card{background:#202428;border-color:#30353b}
           <button id="ledBtn" class="btn" onclick="toggleLED()">LED: OFF</button>
           <button class="btn estop" onclick="stop()">E-STOP</button>
         </div>
+        <div class="control-row" style="margin-top:16px"><span>CAPIT (GRIPPER)</span><span id="gripperState" class="badge">—</span></div>
+        <div class="action-row" style="margin-top:0">
+          <button id="gripCloseBtn" class="btn primary" onclick="gripperClose()">CAPIT</button>
+          <button id="gripOpenBtn" class="btn" onclick="gripperOpen()">CAPIT LEPAS</button>
+        </div>
+        <div class="hint-label" style="margin:10px 0 0">KEYBOARD: C = CAPIT • V = CAPIT LEPAS</div>
       </div>
 
       <div class="controller-card">
@@ -648,6 +654,18 @@ function toggleLED(){
   addLog("LED → "+(ledOn?"ON":"OFF"),ledOn?"ok":"info");
   uartSend(ledOn?"LED_ON":"LED_OFF");
 }
+/* ===== Capit (Gripper) =====
+   Ubah dua string di bawah kalau kode micro:bit-mu memakai nama command lain. */
+const GRIPPER_CLOSE_CMD="capit";
+const GRIPPER_OPEN_CMD="lepas";
+function setGripperUI(state){
+  const el=$("gripperState");
+  if(!el)return;
+  el.textContent=state==="close"?"MENCAPIT":"TERLEPAS";
+  el.className="badge "+(state==="close"?"ok":"");
+}
+function gripperClose(){ send(GRIPPER_CLOSE_CMD); setGripperUI("close"); }
+function gripperOpen(){ send(GRIPPER_OPEN_CMD); setGripperUI("open"); }
 function stop(){send("stop")}
 function addLog(text,type="info"){
   const stamp="["+new Date().toLocaleTimeString()+"] "+text;
@@ -963,6 +981,11 @@ document.addEventListener("keydown",e=>{
   if(ctrlMode!=="keyboard"||!dpadConfig)return;
 
   const key=e.key.toLowerCase();
+  if(key==="c"||key==="v"){
+    e.preventDefault();
+    if(!e.repeat){ key==="c"?gripperClose():gripperOpen(); }
+    return;
+  }
   const dir=wasdMap[key];
   if(dir){
     e.preventDefault();
