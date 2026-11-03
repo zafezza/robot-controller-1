@@ -379,6 +379,93 @@ body.dark .donut-wrap circle:first-child{stroke:#402737}
   .page-head{flex-direction:column}
 }
 @media(max-width:600px){#sensor .grid{grid-template-columns:1fr}}
+/* ===== Smart Parking (user design, scoped) ===== */
+#parkir * { box-sizing: border-box; }
+#parkir { margin: 0; font-family: Arial, sans-serif; background: #0b1120; color: #f1f5f9; }
+#parkir header { padding: 25px 6%; border-bottom: 1px solid #263248; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+#parkir .logo { font-size: 23px; font-weight: bold; }
+#parkir .logo span { color: #38bdf8; }
+#parkir button { border: none; cursor: pointer; border-radius: 10px; padding: 12px 18px; font-weight: bold; transition: 0.2s; }
+#parkir button:hover { opacity: 0.85; transform: translateY(-1px); }
+#parkir .connect { background: #38bdf8; color: #06111d; }
+#parkir .disconnect { background: #334155; color: white; }
+#parkir .heading { margin-bottom: 25px; }
+#parkir .heading h1 { margin-bottom: 8px; font-size: 32px; }
+#parkir .heading p { color: #94a3b8; }
+#parkir .connection { background: #111c30; border: 1px solid #263248; border-radius: 15px; padding: 20px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+#parkir .connection-status { display: flex; align-items: center; gap: 10px; }
+#parkir .dot { width: 11px; height: 11px; background: #64748b; border-radius: 50%; }
+#parkir .dot.online { background: #22c55e; box-shadow: 0 0 12px #22c55e88; }
+#parkir .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px; }
+#parkir .stat { background: #111c30; padding: 22px; border-radius: 15px; border: 1px solid #263248; }
+#parkir .stat p { color: #94a3b8; margin: 0 0 12px; }
+#parkir .stat h2 { font-size: 32px; margin: 0; }
+#parkir .parking-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+#parkir .slot { background: #111c30; border: 1px solid #263248; border-radius: 18px; overflow: hidden; }
+#parkir .slot-top { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+#parkir .slot-name { font-size: 20px; font-weight: bold; }
+#parkir .badge { padding: 7px 11px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+#parkir .slot.free .badge { background: #064e3b; color: #6ee7b7; }
+#parkir .slot.occupied .badge { background: #7f1d1d; color: #fca5a5; }
+#parkir .parking-visual { height: 190px; margin: 0 20px 20px; border-radius: 12px; position: relative; display: flex; justify-content: center; align-items: center; border: 2px dashed #475569; }
+#parkir .slot.free .parking-visual { background: #052e24; border-color: #16a34a; }
+#parkir .slot.occupied .parking-visual { background: #3b1018; border-color: #ef4444; }
+#parkir .car { width: 90px; height: 145px; position: relative; display: none; }
+#parkir .slot.occupied .car { display: block; }
+#parkir .car-body { width: 70px; height: 130px; background: #f87171; border-radius: 20px 20px 12px 12px; position: absolute; left: 10px; top: 7px; border: 3px solid #fecaca; }
+#parkir .car-window { width: 49px; height: 35px; background: #172554; border-radius: 9px; position: absolute; left: 20px; top: 28px; }
+#parkir .car-window.back { top: 82px; }
+#parkir .wheel { width: 9px; height: 29px; background: #0f172a; position: absolute; }
+#parkir .wheel.left { left: 0; }
+#parkir .wheel.right { right: 0; }
+#parkir .wheel.one { top: 28px; }
+#parkir .wheel.two { bottom: 28px; }
+#parkir .slot-info { padding: 0 20px 20px; color: #94a3b8; font-size: 14px; }
+#parkir .slot-info strong { color: #e2e8f0; }
+#parkir .section-title { margin: 35px 0 15px; }
+#parkir .panel { background: #111c30; border: 1px solid #263248; border-radius: 15px; padding: 20px; margin-bottom: 20px; }
+#parkir .panel h3 { margin-top: 0; }
+#parkir .log { max-height: 220px; overflow-y: auto; font-family: monospace; font-size: 13px; }
+#parkir .log-item { padding: 10px 0; border-bottom: 1px solid #263248; color: #cbd5e1; }
+#parkir .log-item span { color: #38bdf8; }
+#parkir .servo-controls { display: flex; gap: 10px; flex-wrap: wrap; }
+#parkir .servo-controls button:first-child { background: #22c55e; color: #052e16; }
+#parkir .servo-controls button:last-child { background: #f59e0b; color: #422006; }
+#parkir footer { text-align: center; padding: 25px; color: #64748b; font-size: 13px; }
+@media(max-width: 750px) {
+  #parkir .parking-grid { grid-template-columns: 1fr; }
+  #parkir .stats { grid-template-columns: 1fr; }
+  #parkir .heading h1 { font-size: 26px; }
+}
+/* perbaikan tab Parkir */
+#parkir{padding:0 24px 10px;border-radius:16px;overflow:hidden}
+#parkir header{padding:25px 0}
+#parkir .section-title{display:block;font-size:18px;letter-spacing:0;color:#f1f5f9}
+#parkir .connection{font-size:14px;color:#f1f5f9}
+#parkir .log{height:auto;background:transparent;border:0;padding:0;color:#cbd5e1}
+/* ===== Tema pink + putih untuk tab Parkir & sisa warna gelap ===== */
+body.dark .brand-mark,body.dark .login-mark{background:#e879aa;color:#fff}
+#parkir{background:transparent;color:var(--text);font-family:inherit}
+#parkir header{border-bottom-color:var(--line)}
+#parkir .logo span{color:var(--accent)}
+#parkir .connect{background:#df78a7;color:#fff}
+#parkir .disconnect{background:var(--surface2);color:var(--text);border:1px solid var(--line)}
+#parkir .heading p,#parkir .slot-info,#parkir .stat p,#parkir .panel p,#parkir footer,#parkir [style*="94a3b8"]{color:var(--muted)!important}
+#parkir .connection,#parkir .stat,#parkir .slot,#parkir .panel{background:var(--surface);border-color:var(--line);box-shadow:var(--sh)}
+#parkir .slot-info strong,#parkir .section-title,#parkir .log{color:var(--text)}
+#parkir .dot{background:#d9c3cf}
+#parkir .dot.online{background:var(--green);box-shadow:0 0 12px rgba(38,155,112,.4)}
+#parkir .slot.free .parking-visual{background:var(--surface2);border-color:#f0c9da}
+#parkir .slot.occupied .parking-visual{background:var(--accent-soft);border-color:var(--accent)}
+#parkir .slot.free .badge{background:#eaf8f0;color:#17784a}
+#parkir .slot.occupied .badge{background:var(--accent-soft);color:#b94f81}
+#parkir .car-body{background:#e879aa;border-color:#fbd5e3}
+#parkir .car-window{background:#fff0f6}
+#parkir .wheel{background:#6b4a5c}
+#parkir .log-item{color:var(--text);border-bottom-color:var(--line)}
+#parkir .log-item span{color:#b94f81}
+#parkir .servo-controls button:first-child{background:#df78a7;color:#fff}
+#parkir .servo-controls button:last-child{background:var(--surface2);color:#b94f81;border:1px solid var(--line)}
 </style>
 </head>
 <body>
@@ -413,6 +500,7 @@ body.dark .donut-wrap circle:first-child{stroke:#402737}
       <button class="tab" onclick="tab('robot',this)"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="10" rx="5"/><path d="M7 12h4M9 10v4"/><circle cx="16" cy="12" r="1"/></svg>TinyBit</button>
       <button class="tab" onclick="tab('ai',this)"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>AI</button>
       <button class="tab" onclick="tab('widget',this)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Widget</button>
+      <button class="tab" onclick="tab('parkir',this)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 8h18M3 16h18"/><rect x="7" y="7" width="10" height="2" rx="1"/><rect x="13" y="7" width="4" height="4" rx="1"/></svg>Parkir</button>
       <button class="tab" onclick="tab('log',this)"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Log</button>
     </nav>
     <div class="side-bottom">
@@ -644,6 +732,139 @@ body.dark .donut-wrap circle:first-child{stroke:#402737}
     </div>
   </section>
 
+  <section id="parkir" class="page">
+    <header>
+      <div class="logo">
+        SMART<span>PARKING</span>
+      </div>
+      <button class="connect" id="connectBtn" onclick="connectBluetooth()">
+        Connect micro:bit
+      </button>
+    </header>
+
+    <div class="heading">
+      <h1>Parking Dashboard</h1>
+      <p>Real-time monitoring untuk sistem smart parking kamu.</p>
+    </div>
+
+    <div class="connection">
+      <div class="connection-status">
+        <div class="dot" id="connectionDot"></div>
+        <div>
+          <strong id="connectionText">Bluetooth belum terhubung</strong>
+          <div style="color:#94a3b8;font-size:13px;margin-top:4px">
+            <span id="deviceName">micro:bit belum dipilih</span>
+          </div>
+        </div>
+      </div>
+      <button class="disconnect" onclick="disconnectBluetooth()">Disconnect</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <p>Total Parkiran</p>
+        <h2>3</h2>
+      </div>
+      <div class="stat">
+        <p>Parkiran Terisi</p>
+        <h2 id="occupiedCount">0</h2>
+      </div>
+      <div class="stat">
+        <p>Parkiran Kosong</p>
+        <h2 id="freeCount">3</h2>
+      </div>
+    </div>
+
+    <h2 class="section-title">Status Parkiran</h2>
+    <div class="parking-grid">
+      <div class="slot free" id="slot1">
+        <div class="slot-top">
+          <div class="slot-name">Parkiran 1</div>
+          <div class="badge" id="badge1">KOSONG</div>
+        </div>
+        <div class="parking-visual">
+          <div class="car">
+            <div class="car-body"></div>
+            <div class="car-window"></div>
+            <div class="car-window back"></div>
+            <div class="wheel left one"></div>
+            <div class="wheel right one"></div>
+            <div class="wheel left two"></div>
+            <div class="wheel right two"></div>
+          </div>
+        </div>
+        <div class="slot-info">
+          Sensor: <strong>P0</strong><br>
+          Status: <strong id="status1">Tidak ada mobil</strong>
+        </div>
+      </div>
+      <div class="slot free" id="slot2">
+        <div class="slot-top">
+          <div class="slot-name">Parkiran 2</div>
+          <div class="badge" id="badge2">KOSONG</div>
+        </div>
+        <div class="parking-visual">
+          <div class="car">
+            <div class="car-body"></div>
+            <div class="car-window"></div>
+            <div class="car-window back"></div>
+            <div class="wheel left one"></div>
+            <div class="wheel right one"></div>
+            <div class="wheel left two"></div>
+            <div class="wheel right two"></div>
+          </div>
+        </div>
+        <div class="slot-info">
+          Sensor: <strong>P1</strong><br>
+          Status: <strong id="status2">Tidak ada mobil</strong>
+        </div>
+      </div>
+      <div class="slot free" id="slot3">
+        <div class="slot-top">
+          <div class="slot-name">Parkiran 3</div>
+          <div class="badge" id="badge3">KOSONG</div>
+        </div>
+        <div class="parking-visual">
+          <div class="car">
+            <div class="car-body"></div>
+            <div class="car-window"></div>
+            <div class="car-window back"></div>
+            <div class="wheel left one"></div>
+            <div class="wheel right one"></div>
+            <div class="wheel left two"></div>
+            <div class="wheel right two"></div>
+          </div>
+        </div>
+        <div class="slot-info">
+          Sensor: <strong>P2</strong><br>
+          Status: <strong id="status3">Tidak ada mobil</strong>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Kontrol Servo</h2>
+    <div class="panel">
+      <h3>Kontrol palang parkir</h3>
+      <p style="color:#94a3b8">
+        Kirim perintah ke micro:bit untuk membuka atau menutup palang.
+      </p>
+      <div class="servo-controls">
+        <button onclick="sendCommand('mobil')">Buka Palang</button>
+        <button onclick="sendCommand('kosong')">Tutup Palang</button>
+      </div>
+    </div>
+
+    <h2 class="section-title">Log Sensor</h2>
+    <div class="panel">
+      <h3>Data Bluetooth</h3>
+      <div class="log" id="parkirLog">
+        <div class="log-item"><span>[SYSTEM]</span> Menunggu koneksi micro:bit...</div>
+      </div>
+    </div>
+
+    <footer>SMART PARKING SYSTEM · MICRO:BIT UART</footer>
+  </section>
+
   <div id="customPages"></div>
 
   <section id="log" class="page">
@@ -654,8 +875,8 @@ body.dark .donut-wrap circle:first-child{stroke:#402737}
 </main>
 
 <!-- TensorFlow.js + Teachable Machine (image) -->
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
 
 <script>
 let connected=false, current="stop", ledOn=false;
@@ -722,11 +943,12 @@ $("photoInput").addEventListener("change",e=>{
   if(!file)return;
   const reader=new FileReader();
   reader.onload=()=>{
-    localStorage.setItem("microbit_profile_photo",reader.result);
+    try{localStorage.setItem("microbit_profile_photo",reader.result)}catch(err){addLog("Foto terlalu besar untuk disimpan di browser","err")}
     applyPhoto(reader.result);
     addLog("Profile photo updated","ok");
   };
   reader.readAsDataURL(file);
+  e.target.value="";
 });
 function applyPhoto(src){
   ["avatar","menuAvatar"].forEach(id=>{
@@ -791,7 +1013,7 @@ async function connect(){
   }
 }
 function onBleDisconnected(){
-  connected=false;
+  connected=false;rxChar=null;txChar=null;rxBuffer="";
   setConnectionUI(false);
   addLog("Micro:bit terputus","err");
 }
@@ -802,6 +1024,10 @@ function setConnectionUI(isConnected){
   $("sensorBadge").textContent=isConnected?"CONNECTED":"DISCONNECTED";
   $("sensorBadge").className="badge "+(isConnected?"ok":"");
   $("signal").textContent=isConnected?"GOOD":"—";
+  if($("connectionDot"))$("connectionDot").classList.toggle("online",isConnected);
+  if($("connectionText"))$("connectionText").textContent=isConnected?"Bluetooth terhubung":"Bluetooth belum terhubung";
+  if($("deviceName"))$("deviceName").textContent=isConnected?((bleDevice&&bleDevice.name)||"micro:bit"):"micro:bit belum dipilih";
+  parkirAddLog("SYSTEM",isConnected?"micro:bit terhubung":"micro:bit terputus");
 }
 /* Web Bluetooth hanya boleh punya satu operasi tulis yang berjalan. Kalau dua command dikirim
    berdekatan (misal dari deteksi kamera), yang kedua bisa gagal "GATT operation already in progress"
@@ -853,11 +1079,11 @@ function parseSensorLine(line){
   updateKnownSensorUI(key,value);
 }
 function updateWidgetValue(key,value){
-  const card=document.querySelector('.widget-card[data-key="'+key+'"]');
-  if(card){
+  document.querySelectorAll(".widget-card[data-key]").forEach(card=>{
+    if(card.dataset.key!==key)return;
     const valEl=card.querySelector(".value");
-    if(valEl) valEl.childNodes[0].nodeValue=value+" ";
-  }
+    if(valEl)valEl.childNodes[0].nodeValue=value+" ";
+  });
 }
 /* Opsional: kalau key-nya cocok dengan kartu bawaan di tab SENSOR, update juga tampilannya di sana. */
 function updateKnownSensorUI(key,value){
@@ -865,7 +1091,7 @@ function updateKnownSensorUI(key,value){
     const cards=document.querySelectorAll("#sensor .value");
     if(cards[0]) cards[0].textContent=value;
   }
-  if(key==="kelembaban"||key==="cahaya"||key==="light"){
+  if(key==="cahaya"||key==="light"){
     const cards=document.querySelectorAll("#sensor .value");
     if(cards[1]) cards[1].textContent=value;
   }
@@ -905,6 +1131,7 @@ function addLog(text,type="info"){
     const d2=document.createElement("div");d2.className=type;d2.textContent=stamp;
     mini.prepend(d2);
   }
+  [$("logBox"),$("miniLog")].forEach(b=>{while(b&&b.children.length>300)b.lastChild.remove()});
 }
 $("speed").oninput=()=>{$("speedValue").textContent=$("speed").value}
 
@@ -1203,7 +1430,7 @@ function releaseDpad(){
 
 /* Keyboard WASD — cuma aktif kalau mode="keyboard" dan dpad sudah dikonfigurasi */
 const wasdMap={w:"up",s:"down",a:"left",d:"right"," ":"center",arrowup:"up",arrowdown:"down",arrowleft:"left",arrowright:"right"};
-let heldWasdKey=null;
+const heldKeys=new Set();
 document.addEventListener("keydown",e=>{
   if($("loginScreen").classList.contains("hidden")===false)return;
   if(["INPUT","TEXTAREA","SELECT"].includes(document.activeElement.tagName))return;
@@ -1219,32 +1446,31 @@ document.addEventListener("keydown",e=>{
   if(dir){
     e.preventDefault();
     if(!e.repeat){
-      heldWasdKey=key;
+      heldKeys.add(key);
       send(dpadConfig[dir]);
       const btn=$("dbtn-"+dir); if(btn)btn.classList.add("pressed");
     }
   }
 });
 window.addEventListener("keyup",e=>{
-  if(ctrlMode!=="keyboard"||!dpadConfig)return;
   const key=e.key.toLowerCase();
-  const dir=wasdMap[key];
-  if(dir){
-    send(dpadConfig.stop);
-    const btn=$("dbtn-"+dir); if(btn)btn.classList.remove("pressed");
-    if(heldWasdKey===key)heldWasdKey=null;
-  }
+  if(!heldKeys.has(key))return;
+  heldKeys.delete(key);
+  send(dpadConfig.stop);
+  const btn=$("dbtn-"+wasdMap[key]); if(btn)btn.classList.remove("pressed");
 });
 window.addEventListener("blur",()=>{
-  if(ctrlMode==="keyboard"&&dpadConfig&&heldWasdKey){
-    send(dpadConfig.stop); releaseDpad(); heldWasdKey=null;
-  }
+  if(heldKeys.size){heldKeys.clear();send(dpadConfig.stop);releaseDpad();}
 });
 
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function loadJSON(k,f){try{const v=JSON.parse(localStorage.getItem(k));return v??f}catch(e){return f}}
+
 /* ===== Custom Pages ===== */
-let pages=JSON.parse(localStorage.getItem("microbit_pages")||"[]");
+let pages=loadJSON("microbit_pages",[]);
 function slugify(name){
-  return "page-"+name.trim().toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"")||("page-"+Date.now());
+  const s=name.trim().toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
+  return "page-"+(s||Date.now());
 }
 function addPage(){
   const name=$("pageName").value.trim();
@@ -1269,6 +1495,7 @@ function removePage(id){
   if(sec)sec.remove();
   renderPages();
   renderWidgets();
+  if(!document.querySelector(".page.active"))tab("sensor",document.querySelector("#tabsNav .tab"));
   if(p)addLog("Page dihapus — "+p.name,"info");
 }
 function renderPages(){
@@ -1284,7 +1511,7 @@ function renderPages(){
       const sec=document.createElement("section");
       sec.className="page";sec.id=p.id;
       sec.innerHTML=
-        '<h2 class="section-title">'+p.name.toUpperCase()+'</h2>'+
+        '<h2 class="section-title">'+esc(p.name.toUpperCase())+'</h2>'+
         '<div class="card">'+
           '<div class="card-title">CUSTOM BUTTONS</div>'+
           '<div class="widget-list" style="margin-top:14px" data-btn-container="'+p.id+'"></div>'+
@@ -1297,7 +1524,7 @@ function renderPages(){
   const sel=$("wPage");
   if(sel){
     sel.innerHTML=pages.length
-      ? pages.map(p=>'<option value="'+p.id+'">'+p.name+'</option>').join("")
+      ? pages.map(p=>'<option value="'+p.id+'">'+esc(p.name)+'</option>').join("")
       : '<option value="">— buat page dulu —</option>';
   }
   // list page di card "BUAT PAGE BARU"
@@ -1308,19 +1535,20 @@ function renderPages(){
     pages.forEach(p=>{
       const el=document.createElement("div");
       el.className="widget-card";
-      el.innerHTML='<b>'+p.name+'</b><button class="btn danger" style="width:100%;margin-top:10px" onclick="removePage(\''+p.id+'\')">HAPUS PAGE</button>';
+      el.innerHTML='<b>'+esc(p.name)+'</b><button class="btn danger" style="width:100%;margin-top:10px" onclick="removePage(\''+p.id+'\')">HAPUS PAGE</button>';
       list.appendChild(el);
     });
   }
 }
 
 /* ===== Widget Builder (DATA + CUSTOM BUTTON) ===== */
-let widgets=JSON.parse(localStorage.getItem("microbit_widgets")||"[]").map(w=>w.kind?w:{...w,kind:"DATA"});
+let widgets=loadJSON("microbit_widgets",[]).map(w=>w.kind?w:{...w,kind:"DATA"});
 
 function updateWidgetFormFields(){
-  const isButton=$("wKind").value==="BUTTON";
-  $("wDataFields").classList.toggle("hidden",isButton);
-  $("wButtonFields").classList.toggle("hidden",!isButton);
+  const k=$("wKind").value;
+  $("wDataFields").classList.toggle("hidden",k!=="DATA");
+  $("wButtonFields").classList.toggle("hidden",k!=="BUTTON");
+  $("wDpadFields").classList.toggle("hidden",k!=="DPAD");
 }
 
 function renderWidgets(){
@@ -1335,9 +1563,9 @@ function renderWidgets(){
     el.className="widget-card";
     el.dataset.key=w.key;
     el.innerHTML=
-      '<small>'+w.type+' • '+w.key+'</small>'+
-      '<b>'+w.name+'</b>'+
-      '<div class="value" style="font-size:16px;margin-top:8px">— <span class="unit" style="display:inline;text-align:left">'+(w.unit||'')+'</span></div>'+
+      '<small>'+esc(w.type)+' • '+esc(w.key)+'</small>'+
+      '<b>'+esc(w.name)+'</b>'+
+      '<div class="value" style="font-size:16px;margin-top:8px">— <span class="unit" style="display:inline;text-align:left">'+esc(w.unit||'')+'</span></div>'+
       '<button class="btn danger" style="width:100%;margin-top:10px" onclick="removeWidget('+gi+')">HAPUS</button>';
     list.appendChild(el);
   });
@@ -1355,7 +1583,7 @@ function renderWidgets(){
       wrap.className="widget-card";
       wrap.innerHTML=
         '<small>CUSTOM BUTTON'+(w.release?' • hold':'')+'</small>'+
-        '<button class="btn primary custom-button" style="width:100%;height:44px;font-size:12px" data-press="'+w.press+'" data-release="'+(w.release||"")+'">'+w.name+'</button>'+
+        '<button class="btn primary custom-button" style="width:100%;height:44px;font-size:12px" data-press="'+esc(w.press)+'" data-release="'+esc(w.release||"")+'">'+esc(w.name)+'</button>'+
         '<button class="btn danger" style="width:100%;margin-top:8px" onclick="removeWidget('+gi+')">HAPUS</button>';
       container.appendChild(wrap);
     });
@@ -1378,6 +1606,16 @@ function bindCustomButtons(){
 }
 function addWidget(){
   const kind=$("wKind").value;
+  if(kind==="DPAD"){
+    const g=id=>$(id).value.trim();
+    const cfg={up:g("dpUp"),down:g("dpDown"),left:g("dpLeft"),right:g("dpRight"),center:g("dpCenter"),stop:g("dpStop")};
+    if(Object.values(cfg).some(v=>!v)){addLog("Widget builder: semua command DPAD wajib diisi","err");return}
+    dpadConfig=cfg;
+    localStorage.setItem("microbit_dpad",JSON.stringify(cfg));
+    renderDpadController();
+    addLog("DPAD controller diperbarui","ok");
+    return;
+  }
   const name=$("wName").value.trim();
   if(!name){addLog("Widget builder: nama/label wajib diisi","err");return}
 
@@ -1428,6 +1666,87 @@ if(savedUser){
 if(!$("loginScreen").classList.contains("hidden"))$("user").focus();
 addLog("Dashboard ready","ok");
 addLog("Waiting for Micro:bit connection","info");
+
+/* ===== Smart Parking (user design) ===== */
+let parkingStatus = { 1: false, 2: false, 3: false };
+
+function connectBluetooth() {
+  connect();
+}
+
+function disconnectBluetooth() {
+  if (bleDevice && bleDevice.gatt.connected) bleDevice.gatt.disconnect();
+}
+
+function setParkingStatus(number, occupied) {
+  parkingStatus[number] = occupied;
+  const slot = document.getElementById("slot" + number);
+  const badge = document.getElementById("badge" + number);
+  const status = document.getElementById("status" + number);
+  if (occupied) {
+    slot.classList.remove("free");
+    slot.classList.add("occupied");
+    badge.textContent = "TERISI";
+    status.textContent = "Ada mobil";
+  } else {
+    slot.classList.remove("occupied");
+    slot.classList.add("free");
+    badge.textContent = "KOSONG";
+    status.textContent = "Tidak ada mobil";
+  }
+  updateParkingStats();
+}
+
+function updateParkingStats() {
+  const occupied = Object.values(parkingStatus).filter(Boolean).length;
+  const free = 3 - occupied;
+  if (document.getElementById("occupiedCount")) document.getElementById("occupiedCount").textContent = occupied;
+  if (document.getElementById("freeCount")) document.getElementById("freeCount").textContent = free;
+}
+
+function parkirAddLog(source, message) {
+  const log = document.getElementById("parkirLog");
+  if (!log) return;
+  const item = document.createElement("div");
+  item.className = "log-item";
+  const time = new Date().toLocaleTimeString();
+  item.innerHTML = "<span>[" + time + "] [" + source + "]</span> " + escapeHTML(message);
+  log.prepend(item);
+  while (log.children.length > 50) {
+    log.removeChild(log.lastElementChild);
+  }
+}
+
+function escapeHTML(text) {
+  const element = document.createElement("div");
+  element.textContent = text;
+  return element.innerHTML;
+}
+
+function sendCommand(command) {
+  if (!connected) {
+    parkirAddLog("SYSTEM", "Hubungkan micro:bit terlebih dahulu!");
+    return;
+  }
+  send(command);
+  parkirAddLog("WEBSITE", "Perintah dikirim: " + command);
+}
+
+/* Parse parking messages: masuk1, keluar2, masuk3, etc. */
+const _origParseSensorLine2 = parseSensorLine;
+parseSensorLine = function (line) {
+  _origParseSensorLine2(line);
+  const m = line.match(/^(masuk|keluar)([123])$/i);
+  if (m) {
+    const action = m[1].toLowerCase();
+    const number = parseInt(m[2], 10);
+    const occupied = action === "masuk";
+    setParkingStatus(number, occupied);
+    parkirAddLog("MICRO:BIT", line);
+    addLog("Parkir: slot " + number + " " + (occupied ? "terisi" : "kosong"), "info");
+  }
+};
 </script>
 </body>
 </html>
+
